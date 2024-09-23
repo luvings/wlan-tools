@@ -39,6 +39,11 @@
 #include <linux/version.h>
 #endif
 
+#define LOGV(format, ...)			\
+	do {					\
+		fprintf(stderr, "%s:%u: " format "\n", __func__, __LINE__, ##__VA_ARGS__);	\
+	} while (0)
+
 /* Kernel headers 2.4.X + Glibc 2.2 - Mandrake 8.0, Debian 2.3, RH 7.1
  * Kernel headers 2.2.X + Glibc 2.2 - Slackware 8.0 */
 #if defined(__GLIBC__) \

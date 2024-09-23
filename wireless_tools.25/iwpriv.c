@@ -556,6 +556,8 @@ static int print_priv_info(int		skfd,
 	/* Read the private ioctls */
 	n = iw_get_priv_info(skfd, ifname, priv, IW_MAX_PRIV_DEF);
 
+	LOGV("n=%d", n);
+
 	/* Is there any ? */
 	if (n <= 0) {
 		/* Could skip this message ? */
@@ -842,6 +844,8 @@ int main(int	argc,
 {
 	int skfd;		/* generic raw socket desc.	*/
 	int goterr = 0;
+
+	LOGV("argc=%d, *argv=%s", argc, *argv);
 
 	/* Create a channel to the NET kernel. */
 	if ((skfd = iw_sockets_open()) < 0) {

@@ -91,8 +91,10 @@ int iw_sockets_open(void)
 		/* Try to open the socket, if success returns it */
 		sock = socket(families[i], SOCK_DGRAM, 0);
 
-		if (sock >= 0)
+		if (sock >= 0) {
+			LOGV("socket(%d, ..)=%d", families[i], sock);
 			return sock;
+		}
 	}
 
 	return -1;

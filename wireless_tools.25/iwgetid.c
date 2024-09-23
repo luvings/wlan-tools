@@ -100,21 +100,25 @@ int iw_sockets_open(void)
 	 * The remaining 1% case are not fully correct...
 	 */
 	inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
+	LOGV("socket(AF_INET, SOCK_DGRAM, 0)=%d", inet_sock);
 
 	if (inet_sock != -1)
 		return inet_sock;
 
 	ipx_sock = socket(AF_IPX, SOCK_DGRAM, 0);
+	LOGV("socket(AF_IPX, SOCK_DGRAM, 0)=%d", ipx_sock);
 
 	if (ipx_sock != -1)
 		return ipx_sock;
 
 	ax25_sock = socket(AF_AX25, SOCK_DGRAM, 0);
+	LOGV("socket(AF_AX25, SOCK_DGRAM, 0)=%d", ax25_sock);
 
 	if (ax25_sock != -1)
 		return ax25_sock;
 
 	ddp_sock = socket(AF_APPLETALK, SOCK_DGRAM, 0);
+	LOGV("socket(AF_APPLETALK, SOCK_DGRAM, 0)=%d", ddp_sock);
 	/*
 	 * If this is -1 we have no known network layers and its time to jump.
 	 */
@@ -389,11 +393,14 @@ static int print_protocol(int		skfd,
 	unsigned int		i;
 	unsigned int		j;
 
+	LOGV("");
 	/* Get Protocol name */
 	strncpy(wrq.ifr_name, ifname, IFNAMSIZ);
 
-	if (ioctl(skfd, SIOCGIWNAME, &wrq) < 0)
+	if (ioctl(skfd, SIOCGIWNAME, &wrq) < 0) {
+		LOGV("ioctl(.., SIOCGIWNAME, ..) failed");
 		return (-1);
+	}
 
 	strncpy(proto, wrq.u.name, IFNAMSIZ);
 	proto[IFNAMSIZ] = '\0';
@@ -435,6 +442,8 @@ static int print_one_device(int		skfd,
                             const char	*ifname)
 {
 	int ret;
+
+	LOGV("");
 
 	/* Check wtype */
 	switch (wtype) {
@@ -484,6 +493,7 @@ static int scan_devices(int		skfd,
 	struct ifreq *ifr;
 	int		i;
 
+	LOGV("");
 	/* Get list of active devices */
 	ifc.ifc_len = sizeof(buff);
 	ifc.ifc_buf = buff;
@@ -497,6 +507,10 @@ static int scan_devices(int		skfd,
 
 	/* Print the first match */
 	for (i = ifc.ifc_len / sizeof(struct ifreq); --i >= 0; ifr++) {
+		LOGV("i=%d, ifr->ifr_name=%s", i, ifr->ifr_name);
+		LOGV("i=%d, (*(struct sockaddr_in *)&ifr->ifr_addr).sin_family=%d", i, (*(struct sockaddr_in *)&ifr->ifr_addr).sin_family);
+		LOGV("i=%d, (*(struct sockaddr_in *)&ifr->ifr_addr).sin_addr.s_addr=0x%x", i, (*(struct sockaddr_in *)&ifr->ifr_addr).sin_addr.s_addr);
+
 		if (print_one_device(skfd, format, wtype, ifr->ifr_name) >= 0)
 			return 0;
 	}
@@ -593,6 +607,9 @@ int main(int	argc,
 		perror("socket");
 		return (-1);
 	}
+
+	LOGV("optind=%d, argc=%d", optind, argc);
+	LOGV("format=%d, wtype=%d", format, wtype);
 
 	/* Check if first argument is a device name */
 	if (optind < argc) {
