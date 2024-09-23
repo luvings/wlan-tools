@@ -723,6 +723,8 @@ static inline int wpa_drv_vendor_cmd(struct wpa_supplicant *wpa_s,
 				     enum nested_attr nested_attr_flag,
 				     struct wpabuf *buf)
 {
+	LOGV("wpa_s->driver->vendor_cmd=%p", wpa_s->driver->vendor_cmd);
+
 	if (!wpa_s->driver->vendor_cmd)
 		return -1;
 	return wpa_s->driver->vendor_cmd(wpa_s->drv_priv, vendor_id, subcmd,

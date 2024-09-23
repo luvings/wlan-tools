@@ -7308,6 +7308,8 @@ struct wpa_global * wpa_supplicant_init(struct wpa_params *params)
 	struct wpa_global *global;
 	int ret, i;
 
+	LOGV("");
+
 	if (params == NULL)
 		return NULL;
 

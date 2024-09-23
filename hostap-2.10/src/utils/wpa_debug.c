@@ -27,7 +27,7 @@ static FILE *wpa_debug_tracing_file = NULL;
 #endif /* CONFIG_DEBUG_LINUX_TRACING */
 
 
-int wpa_debug_level = MSG_INFO;
+int wpa_debug_level = MSG_MSGDUMP;
 int wpa_debug_show_keys = 0;
 int wpa_debug_timestamp = 0;
 int wpa_debug_syslog = 0;

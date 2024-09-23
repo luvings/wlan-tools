@@ -23,6 +23,11 @@ enum {
 	MSG_EXCESSIVE, MSG_MSGDUMP, MSG_DEBUG, MSG_INFO, MSG_WARNING, MSG_ERROR
 };
 
+#define LOGV(format, ...)			\
+	do {					\
+		wpa_printf(MSG_EXCESSIVE, "%s:%u: " format, __func__, __LINE__, ##__VA_ARGS__);	\
+	} while (0)
+
 #ifdef CONFIG_NO_STDOUT_DEBUG
 
 #define wpa_debug_print_timestamp() do { } while (0)
