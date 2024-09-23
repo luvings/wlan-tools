@@ -376,6 +376,8 @@ int iw_get_priv_info(int		skfd,
 {
 	struct iwreq		wrq;
 
+	LOGV("ifname=%s", ifname);
+
 	/* Ask the driver */
 	wrq.u.data.pointer = (caddr_t) priv;
 	wrq.u.data.length = maxpriv;

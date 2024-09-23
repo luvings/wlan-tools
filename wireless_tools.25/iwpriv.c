@@ -203,6 +203,13 @@ static void iw_usage(void)
 /*
  * Execute a private command on the interface
  */
+/*
+ * e.g.
+ *
+ * 1) iwpriv wlan0 get_band
+ *
+ * 2) iwpriv wlan0 driver stat
+ */
 static int set_private_cmd(int		skfd,		/* Socket */
                            char 		*args[],		/* Command line args */
                            int		count,		/* Args count */
@@ -218,6 +225,8 @@ static int set_private_cmd(int		skfd,		/* Socket */
 	int		temp;
 	int		subcmd = 0;	/* sub-ioctl index */
 	int		offset = 0;	/* Space for sub-ioctl index */
+
+	LOGV("count=%d, *args=%s, ifname=%s, cmdname=%s", count, *args, ifname, cmdname);
 
 	/* Check if we have a token index.
 	 * Do it know so that sub-ioctl takes precendence, and so that we
@@ -238,6 +247,8 @@ static int set_private_cmd(int		skfd,		/* Socket */
 		fprintf(stderr, "Invalid command : %s\n", cmdname);
 		return (-1);
 	}
+
+	LOGV("priv[k%d].cmd=0x%X", k, priv[k].cmd);
 
 	/* Watch out for sub-ioctls ! */
 	if (priv[k].cmd < SIOCDEVPRIVATE) {
@@ -262,13 +273,15 @@ static int set_private_cmd(int		skfd,		/* Socket */
 		/* Use real ioctl definition from now on */
 		k = j;
 
-		printf("<mapping sub-ioctl %s to cmd 0x%X-%d>\n", cmdname,
-		       priv[k].cmd, subcmd);
+		LOGV("priv[j%d].cmd=0x%X, subcmd=%d, offset=%d", j, priv[j].cmd, subcmd, offset);
+
+		printf("<mapping sub-ioctl %s to cmd 0x%X-%d>\n", cmdname, priv[k].cmd, subcmd);
 	}
 
+	LOGV("priv[k%d].set_args=0x%x, priv[k%d].get_args=0x%x", k, priv[k].set_args, k, priv[k].get_args);
+
 	/* If we have to set some data */
-	if ((priv[k].set_args & IW_PRIV_TYPE_MASK) &&
-	                (priv[k].set_args & IW_PRIV_SIZE_MASK)) {
+	if ((priv[k].set_args & IW_PRIV_TYPE_MASK) && (priv[k].set_args & IW_PRIV_SIZE_MASK)) {
 		switch (priv[k].set_args & IW_PRIV_TYPE_MASK) {
 		case IW_PRIV_TYPE_BYTE:
 			/* Number of args to fetch */
@@ -305,6 +318,8 @@ static int set_private_cmd(int		skfd,		/* Socket */
 				/* Size of the string to fetch */
 				wrq.u.data.length = strlen(args[i]) + 1;
 
+				LOGV("args[%d]=%s, wrq.u.data.length=%d", i, args[i], wrq.u.data.length);
+
 				if (wrq.u.data.length > (priv[k].set_args & IW_PRIV_SIZE_MASK))
 					wrq.u.data.length = priv[k].set_args & IW_PRIV_SIZE_MASK;
 
@@ -316,6 +331,8 @@ static int set_private_cmd(int		skfd,		/* Socket */
 			} else {
 				wrq.u.data.length = 1;
 				buffer[0] = '\0';
+
+				LOGV("wrq.u.data.length=%d", wrq.u.data.length);
 			}
 
 			break;
@@ -385,10 +402,11 @@ static int set_private_cmd(int		skfd,		/* Socket */
 
 	strncpy(wrq.ifr_name, ifname, IFNAMSIZ);
 
+	LOGV("subcmd=0x%X", subcmd);
+
 	/* Those two tests are important. They define how the driver
 	 * will have to handle the data */
-	if ((priv[k].set_args & IW_PRIV_SIZE_FIXED) &&
-	                ((iw_get_priv_size(priv[k].set_args) + offset) <= IFNAMSIZ)) {
+	if ((priv[k].set_args & IW_PRIV_SIZE_FIXED) && ((iw_get_priv_size(priv[k].set_args) + offset) <= IFNAMSIZ)) {
 		/* First case : all SET args fit within wrq */
 		if (offset)
 			wrq.u.mode = subcmd;
@@ -396,9 +414,7 @@ static int set_private_cmd(int		skfd,		/* Socket */
 		memcpy(wrq.u.name + offset, buffer, IFNAMSIZ - offset);
 
 	} else {
-		if ((priv[k].set_args == 0) &&
-		                (priv[k].get_args & IW_PRIV_SIZE_FIXED) &&
-		                (iw_get_priv_size(priv[k].get_args) <= IFNAMSIZ)) {
+		if ((priv[k].set_args == 0) && (priv[k].get_args & IW_PRIV_SIZE_FIXED) && (iw_get_priv_size(priv[k].get_args) <= IFNAMSIZ)) {
 			/* Second case : no SET args, GET args fit within wrq */
 			if (offset)
 				wrq.u.mode = subcmd;
@@ -418,16 +434,14 @@ static int set_private_cmd(int		skfd,		/* Socket */
 	}
 
 	/* If we have to get some data */
-	if ((priv[k].get_args & IW_PRIV_TYPE_MASK) &&
-	                (priv[k].get_args & IW_PRIV_SIZE_MASK)) {
+	if ((priv[k].get_args & IW_PRIV_TYPE_MASK) && (priv[k].get_args & IW_PRIV_SIZE_MASK)) {
 		int	j;
 		int	n = 0;		/* number of args */
 
-		printf("%-8.8s  %s:", ifname, cmdname);
+		printf("%-8.8s  %s: ", ifname, cmdname);
 
 		/* Check where is the returned data */
-		if ((priv[k].get_args & IW_PRIV_SIZE_FIXED) &&
-		                (iw_get_priv_size(priv[k].get_args) <= IFNAMSIZ)) {
+		if ((priv[k].get_args & IW_PRIV_SIZE_FIXED) && (iw_get_priv_size(priv[k].get_args) <= IFNAMSIZ)) {
 			memcpy(buffer, wrq.u.name, IFNAMSIZ);
 			n = priv[k].get_args & IW_PRIV_SIZE_MASK;
 
@@ -517,6 +531,8 @@ static inline int set_private(int		skfd,		/* Socket */
 {
 	iwprivargs	priv[IW_MAX_PRIV_DEF];
 	int		number;		/* Max of private ioctl */
+
+	LOGV("ifname=%s, count=%d, *args=%s", ifname, count, *args);
 
 	/* Read the private ioctls */
 	number = iw_get_priv_info(skfd, ifname, priv, IW_MAX_PRIV_DEF);

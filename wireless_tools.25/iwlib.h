@@ -396,6 +396,7 @@ static inline int iw_get_ext(int			skfd,		/* Socket to the kernel */
 {
 	/* Set device name */
 	strncpy(pwrq->ifr_name, ifname, IFNAMSIZ);
+
 	/* Do the request */
 	return (ioctl(skfd, request, pwrq));
 }
