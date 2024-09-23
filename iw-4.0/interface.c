@@ -354,6 +354,8 @@ static int print_iface_handler(struct nl_msg *msg, void *arg)
 	unsigned int *wiphy = arg;
 	const char *indent = "";
 
+	LOGV("");
+
 	nla_parse(tb_msg, NL80211_ATTR_MAX, genlmsg_attrdata(gnlh, 0),
 	          genlmsg_attrlen(gnlh, 0), NULL);
 
@@ -436,6 +438,8 @@ static int handle_interface_info(struct nl80211_state *state,
                                  int argc, char **argv,
                                  enum id_input id)
 {
+	LOGV("");
+
 	nl_cb_set(cb, NL_CB_VALID, NL_CB_CUSTOM, print_iface_handler, NULL);
 	return 0;
 }

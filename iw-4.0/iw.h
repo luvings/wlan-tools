@@ -18,6 +18,11 @@
 #  define nl_sock nl_handle
 #endif
 
+#define LOGV(format, ...)			\
+	do {					\
+		fprintf(stderr, "%s:%u: " format "\n", __func__, __LINE__, ##__VA_ARGS__);	\
+	} while (0)
+
 struct nl80211_state {
 	struct nl_sock *nl_sock;
 	int nl80211_id;
