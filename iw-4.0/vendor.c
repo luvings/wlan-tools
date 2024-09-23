@@ -48,6 +48,9 @@ static int read_hex(int argc, char **argv, char *buf, size_t size)
 	return argc;
 }
 
+/*
+ * sudo iw dev wlan0 vendor send 0x001A11 0x00 0x01 0x02
+ */
 static int handle_vendor(struct nl80211_state *state, struct nl_cb *cb,
                          struct nl_msg *msg, int argc, char **argv,
                          enum id_input id)
@@ -57,6 +60,8 @@ static int handle_vendor(struct nl80211_state *state, struct nl_cb *cb,
 	char buf[2048] = {};
 	int res, count = 0;
 	FILE *file = NULL;
+
+	LOGV("");
 
 	if (argc < 3)
 		return -EINVAL;
@@ -82,10 +87,13 @@ static int handle_vendor(struct nl80211_state *state, struct nl_cb *cb,
 
 	if (file) {
 		count = read_file(file, buf, sizeof(buf));
+		LOGV("read_file(%s, ..)=%d", argv[2], count);
 		fclose(file);
 
-	} else
+	} else {
 		count = read_hex(argc - 2, &argv[2], buf, sizeof(buf));
+		LOGV("read_hex(%d, ..)=%d", argc - 2, count);
+	}
 
 	if (count < 0)
 		return -EINVAL;

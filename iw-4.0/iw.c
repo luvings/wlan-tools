@@ -338,6 +338,8 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 	char *tmp, **o_argv;
 	enum command_identify_by command_idby = CIB_NONE;
 
+	LOGV("argc=%d, *argv=%s, idby=%d", argc, *argv, idby);
+
 	if (argc <= 1 && idby != II_NONE)
 		return 1;
 
@@ -366,6 +368,7 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 	case II_NETDEV:
 		command_idby = CIB_NETDEV;
 		devidx = if_nametoindex(*argv);
+		LOGV("devidx=%lld", devidx);
 
 		if (devidx == 0)
 			devidx = -1;
@@ -395,6 +398,8 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 	argc--;
 	argv++;
 
+	LOGV("argc=%d, *argv=%s", argc, *argv);
+
 	for_each_cmd(sectcmd) {
 		if (sectcmd->parent)
 			continue;
@@ -412,6 +417,8 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 
 	if (!sectcmd)
 		return 1;
+
+	LOGV("argc=%d, *argv=%s", argc, *argv);
 
 	if (argc > 0) {
 		command = *argv;
@@ -448,6 +455,8 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 		}
 	}
 
+	LOGV("match=%p, match->name=%s", match, match ? match->name : "nil");
+
 	if (match)
 		cmd = match;
 
@@ -465,6 +474,8 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 		if (!cmd->handler)
 			return 1;
 	}
+
+	LOGV("cmd->name=%s, cmd->cmd=%d, cmd->selector=%p", cmd->name, cmd->cmd, cmd->selector);
 
 	if (cmd->selector) {
 		cmd = cmd->selector(argc, argv);
@@ -536,9 +547,12 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 	nl_cb_set(cb, NL_CB_FINISH, NL_CB_CUSTOM, finish_handler, &err);
 	nl_cb_set(cb, NL_CB_ACK, NL_CB_CUSTOM, ack_handler, &err);
 
+	LOGV("err=%d", err);
+
 	while (err > 0)
 		nl_recvmsgs(state->nl_sock, cb);
 
+	LOGV("after nl_recvmsgs(..), err=%d", err);
 out:
 	nl_cb_put(cb);
 out_free_msg:
@@ -588,6 +602,8 @@ int main(int argc, char **argv)
 
 	if (err)
 		return 1;
+
+	LOGV("argc=%d, *argv=%s", argc, *argv);
 
 	if (strcmp(*argv, "dev") == 0 && argc > 1) {
 		argc--;
