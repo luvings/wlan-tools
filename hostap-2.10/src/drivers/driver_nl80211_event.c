@@ -2501,6 +2501,8 @@ static void nl80211_vendor_event(struct wpa_driver_nl80211_data *drv,
 	u8 *data = NULL;
 	size_t len = 0;
 
+	LOGV("");
+
 	if (!tb[NL80211_ATTR_VENDOR_ID] ||
 	    !tb[NL80211_ATTR_VENDOR_SUBCMD])
 		return;
