@@ -32,7 +32,7 @@ CONFIG_DRIVER_WEXT=y
 CONFIG_DRIVER_NL80211=y
 
 # QCA vendor extensions to nl80211
-#CONFIG_DRIVER_NL80211_QCA=y
+CONFIG_DRIVER_NL80211_QCA=y
 
 # driver_nl80211.c requires libnl. If you are compiling it yourself
 # you may need to point hostapd to your version of libnl.
@@ -169,12 +169,12 @@ CONFIG_EAP_TNC=y
 # Wi-Fi Protected Setup (WPS)
 CONFIG_WPS=y
 # Enable WPS external registrar functionality
-#CONFIG_WPS_ER=y
+CONFIG_WPS_ER=y
 # Disable credentials for an open network by default when acting as a WPS
 # registrar.
-#CONFIG_WPS_REG_DISABLE_OPEN=y
+CONFIG_WPS_REG_DISABLE_OPEN=y
 # Enable WPS support with NFC config method
-#CONFIG_WPS_NFC=y
+CONFIG_WPS_NFC=y
 
 # EAP-IKEv2
 CONFIG_EAP_IKEV2=y
@@ -222,7 +222,7 @@ CONFIG_CTRL_IFACE=y
 # When building a wpa_cli binary for distribution, please note that these
 # libraries are licensed under GPL and as such, BSD license may not apply for
 # the resulting binary.
-#CONFIG_READLINE=y
+CONFIG_READLINE=y
 
 # Include internal line edit mode in wpa_cli. This can be used as a replacement
 # for GNU Readline to provide limited command line editing and history support.
@@ -569,7 +569,7 @@ CONFIG_WIFI_DISPLAY=y
 #CONFIG_ACS=y
 
 # Support Multi Band Operation
-#CONFIG_MBO=y
+CONFIG_MBO=y
 
 # Fast Initial Link Setup (FILS) (IEEE 802.11ai)
 #CONFIG_FILS=y
@@ -601,7 +601,7 @@ CONFIG_BGSCAN_SIMPLE=y
 
 # Opportunistic Wireless Encryption (OWE)
 # Experimental implementation of draft-harkins-owe-07.txt
-#CONFIG_OWE=y
+CONFIG_OWE=y
 
 # Device Provisioning Protocol (DPP) (also known as Wi-Fi Easy Connect)
 CONFIG_DPP=y
@@ -617,7 +617,7 @@ CONFIG_DPP2=y
 # functionality needed to use WEP is available in the current wpa_supplicant
 # release under this optional build parameter. This functionality is subject to
 # be completely removed in a future release.
-#CONFIG_WEP=y
+CONFIG_WEP=y
 
 # Remove all TKIP functionality
 # TKIP is an old cryptographic data confidentiality algorithm that is not

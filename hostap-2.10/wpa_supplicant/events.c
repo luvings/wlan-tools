@@ -579,6 +579,8 @@ static int wpa_supplicant_ssid_bss_match(struct wpa_supplicant *wpa_s,
 		 (ssid->key_mgmt & WPA_KEY_MGMT_IEEE8021X_NO_WPA));
 #endif /* CONFIG_WEP */
 
+	LOGV("ssid->proto=0x%x", ssid->proto);
+
 	rsn_ie = wpa_bss_get_ie(bss, WLAN_EID_RSN);
 	while ((ssid->proto & (WPA_PROTO_RSN | WPA_PROTO_OSEN)) && rsn_ie) {
 		proto_match++;
@@ -635,6 +637,7 @@ static int wpa_supplicant_ssid_bss_match(struct wpa_supplicant *wpa_s,
 			break;
 		}
 
+		LOGV("ie.key_mgmt=0x%x, ssid->key_mgmt=0x%x", ie.key_mgmt, ssid->key_mgmt);
 		if (!(ie.key_mgmt & ssid->key_mgmt)) {
 			if (debug_print)
 				wpa_dbg(wpa_s, MSG_DEBUG,
@@ -1482,6 +1485,8 @@ struct wpa_ssid * wpa_scan_res_match(struct wpa_supplicant *wpa_s,
 	size_t match_ssid_len;
 	int bssid_ignore_count;
 
+	LOGV("");
+
 	ie = wpa_bss_get_vendor_ie(bss, WPA_IE_VENDOR_TYPE);
 	wpa_ie_len = ie ? ie[1] : 0;
 
@@ -1577,6 +1582,8 @@ wpa_supplicant_select_bss(struct wpa_supplicant *wpa_s,
 {
 	unsigned int i;
 
+	LOGV("");
+
 	if (wpa_s->current_ssid) {
 		struct wpa_ssid *ssid;
 
@@ -1586,7 +1593,7 @@ wpa_supplicant_select_bss(struct wpa_supplicant *wpa_s,
 			struct wpa_bss *bss = wpa_s->last_scan_res[i];
 
 			ssid = wpa_scan_res_match(wpa_s, i, bss, group,
-						  only_first_ssid, 0);
+						  only_first_ssid, 1);
 			if (ssid != wpa_s->current_ssid)
 				continue;
 			wpa_dbg(wpa_s, MSG_DEBUG, "%u: " MACSTR

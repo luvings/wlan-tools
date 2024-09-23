@@ -1,0 +1,20 @@
+ctrl_interface=/var/run/wpa_supplicant
+update_config=1
+sae_pwe=2
+
+network={
+	ssid="ASUS_5G"
+	psk="12345678"
+	proto=WPA WPA2
+	key_mgmt=WPA-PSK WPA-PSK-SHA256
+	priority=0
+}
+
+network={
+	ssid="H"
+	psk="1234567890"
+	proto=WPA RSN
+	key_mgmt=WPA-PSK SAE
+	ieee80211w=1
+	priority=3
+}
