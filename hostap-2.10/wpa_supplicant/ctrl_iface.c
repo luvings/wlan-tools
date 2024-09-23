@@ -8295,7 +8295,9 @@ static int wpa_supplicant_driver_cmd(struct wpa_supplicant *wpa_s, char *cmd,
 }
 #endif /* ANDROID */
 
-
+/*
+ * sudo wpa_cli -iwlan0 vendor 0x001A11 0 0102 nested=0
+ */
 static int wpa_supplicant_vendor_cmd(struct wpa_supplicant *wpa_s, char *cmd,
 				     char *buf, size_t buflen)
 {
@@ -8308,14 +8310,15 @@ static int wpa_supplicant_vendor_cmd(struct wpa_supplicant *wpa_s, char *cmd,
 	size_t data_len = 0;
 
 	/**
-	 * cmd: <vendor id> <subcommand id> [<hex formatted data>]
-	 * [nested=<0|1>]
+	 * cmd: <vendor id> <subcommand id> [<hex formatted data>] [nested=<0|1>]
 	 */
 	vendor_id = strtoul(cmd, &pos, 16);
 	if (!isblank((unsigned char) *pos))
 		return -EINVAL;
 
 	subcmd = strtoul(pos, &pos, 10);
+
+	LOGV("vendor_id=0x%06x, subcmd=%d", vendor_id, subcmd);
 
 	if (*pos != '\0') {
 		if (!isblank((unsigned char) *pos++))
@@ -8337,6 +8340,13 @@ static int wpa_supplicant_vendor_cmd(struct wpa_supplicant *wpa_s, char *cmd,
 			os_free(data);
 			return -EINVAL;
 		}
+
+	}
+
+	LOGV("data_len=%ld", data_len);
+
+	for (int i = 0; i < data_len; i++) {
+		LOGV("data[%d]=0x%02x", i, data[i]);
 	}
 
 	pos = os_strstr(cmd, "nested=");
@@ -11449,6 +11459,8 @@ char * wpa_supplicant_ctrl_iface_process(struct wpa_supplicant *wpa_s,
 	char *reply;
 	const int reply_size = 4096;
 	int reply_len;
+
+	LOGV("");
 
 	if (os_strncmp(buf, WPA_CTRL_RSP, os_strlen(WPA_CTRL_RSP)) == 0 ||
 	    os_strncmp(buf, "SET_NETWORK ", 12) == 0 ||
