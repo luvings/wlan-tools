@@ -397,6 +397,8 @@ static int send_and_recv(struct nl80211_global *global,
 	struct nl_cb *cb;
 	int err = -ENOMEM, opt;
 
+	LOGV("");
+
 	if (!msg)
 		return -ENOMEM;
 
@@ -482,6 +484,8 @@ int send_and_recv_msgs(struct wpa_driver_nl80211_data *drv,
 		       int (*ack_handler_custom)(struct nl_msg *, void *),
 		       void *ack_data)
 {
+	LOGV("");
+
 	return send_and_recv(drv->global, drv->global->nl, msg,
 			     valid_handler, valid_data,
 			     ack_handler_custom, ack_data);
@@ -10072,6 +10076,8 @@ static int nl80211_vendor_cmd(void *priv, unsigned int vendor_id,
 	struct wpa_driver_nl80211_data *drv = bss->drv;
 	struct nl_msg *msg;
 	int ret, nla_flag;
+
+	LOGV("");
 
 #ifdef CONFIG_TESTING_OPTIONS
 	if (vendor_id == 0xffffffff) {
