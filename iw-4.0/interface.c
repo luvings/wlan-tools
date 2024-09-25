@@ -182,6 +182,9 @@ nla_put_failure:
 	return 1;
 }
 
+/*
+ * 1) sudo iw phy phy11 interface add mon0 type monitor
+ */
 static int handle_interface_add(struct nl80211_state *state,
                                 struct nl_cb *cb,
                                 struct nl_msg *msg,
@@ -192,8 +195,10 @@ static int handle_interface_add(struct nl80211_state *state,
 	char *mesh_id = NULL;
 	enum nl80211_iftype type;
 	int tpset;
-	unsigned char mac_addr[ETH_ALEN];
+	unsigned char mac_addr[ETH_ALEN] = { 0, };
 	int found_mac = 0;
+
+	LOGV("");
 
 	if (argc < 1)
 		return 1;
@@ -202,12 +207,18 @@ static int handle_interface_add(struct nl80211_state *state,
 	argc--;
 	argv++;
 
+	LOGV("name=%s, argc=%d, *argv=%s", name, argc, *argv);
+
 	tpset = get_if_type(&argc, &argv, &type, true);
+
+	LOGV("tpset=%d, type=%d", tpset, type);
 
 	if (tpset)
 		return tpset;
 
 try_another:
+
+	LOGV("argc=%d, *argv=%s", argc, *argv);
 
 	if (argc) {
 		if (strcmp(argv[0], "mesh_id") == 0) {
@@ -263,6 +274,8 @@ try_another:
 
 	if (argc)
 		return 1;
+
+	LOGV("name=%s, type=%d, mesh_id=%s, found_mac=%d, mac_addr=%s", name, type, mesh_id, found_mac, mac_addr);
 
 	NLA_PUT_STRING(msg, NL80211_ATTR_IFNAME, name);
 	NLA_PUT_U32(msg, NL80211_ATTR_IFTYPE, type);

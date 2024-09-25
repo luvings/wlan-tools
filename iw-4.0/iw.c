@@ -49,6 +49,8 @@ static int nl80211_init(struct nl80211_state *state)
 {
 	int err;
 
+	LOGV("");
+
 	state->nl_sock = nl_socket_alloc();
 
 	if (!state->nl_sock) {
@@ -361,6 +363,7 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 	case II_PHY_NAME:
 		command_idby = CIB_PHY;
 		devidx = phy_lookup(*argv);
+
 		argc--;
 		argv++;
 		break;
@@ -368,8 +371,6 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 	case II_NETDEV:
 		command_idby = CIB_NETDEV;
 		devidx = if_nametoindex(*argv);
-		LOGV("devidx=%lld", devidx);
-
 		if (devidx == 0)
 			devidx = -1;
 
@@ -391,14 +392,16 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 		break;
 	}
 
+	LOGV("devidx=%lld", devidx);
+
 	if (devidx < 0)
 		return -errno;
+
+	LOGV("argc=%d, *argv=%s", argc, *argv);
 
 	section = *argv;
 	argc--;
 	argv++;
-
-	LOGV("argc=%d, *argv=%s", argc, *argv);
 
 	for_each_cmd(sectcmd) {
 		if (sectcmd->parent)
@@ -413,6 +416,8 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 	}
 
 	sectcmd = match;
+	LOGV("sectcmd=%p, sectcmd->name=%s", match, match ? match->name : "nil");
+
 	match = NULL;
 
 	if (!sectcmd)
@@ -509,6 +514,8 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 		goto out_free_msg;
 	}
 
+	LOGV("state->nl80211_id=%d, cmd->nl_msg_flags=%d, cmd->cmd=%d", state->nl80211_id, cmd->nl_msg_flags, cmd->cmd);
+
 	genlmsg_put(msg, 0, 0, state->nl80211_id, 0,
 	            cmd->nl_msg_flags, cmd->cmd, 0);
 
@@ -528,6 +535,8 @@ static int __handle_cmd(struct nl80211_state *state, enum id_input idby,
 	default:
 		break;
 	}
+
+	LOGV("argc=%d, *argv=%s", argc, *argv);
 
 	err = cmd->handler(state, cb, msg, argc, argv, idby);
 
@@ -611,6 +620,8 @@ int main(int argc, char **argv)
 		err = __handle_cmd(&nlstate, II_NETDEV, argc, argv, &cmd);
 
 	} else if (strncmp(*argv, "phy", 3) == 0 && argc > 1) {
+		LOGV("strlen(*argv)=%ld", strlen(*argv));
+
 		if (strlen(*argv) == 3) {
 			argc--;
 			argv++;
