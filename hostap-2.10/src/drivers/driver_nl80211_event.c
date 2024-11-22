@@ -2085,7 +2085,7 @@ static void qca_nl80211_key_mgmt_auth(struct wpa_driver_nl80211_data *drv,
 		return;
 
 	bssid = nla_data(tb[QCA_WLAN_VENDOR_ATTR_ROAM_AUTH_BSSID]);
-	wpa_printf(MSG_DEBUG, "  * roam BSSID " MACSTR, MAC2STR(bssid));
+	wpa_printf(MSG_DEBUG, "  ⋆ roam BSSID " MACSTR, MAC2STR(bssid));
 
 	mlme_event_connect(drv, NL80211_CMD_ROAM, NULL,
 			   tb[QCA_WLAN_VENDOR_ATTR_ROAM_AUTH_BSSID],
@@ -2564,7 +2564,7 @@ static void nl80211_reg_change_event(struct wpa_driver_nl80211_data *drv,
 
 	os_memset(&data, 0, sizeof(data));
 	init = nla_get_u8(tb[NL80211_ATTR_REG_INITIATOR]);
-	wpa_printf(MSG_DEBUG, " * initiator=%d", init);
+	wpa_printf(MSG_DEBUG, " ⋆ initiator=%d", init);
 	switch (init) {
 	case NL80211_REGDOM_SET_BY_CORE:
 		data.channel_list_changed.initiator = REGDOM_SET_BY_CORE;
@@ -2583,7 +2583,7 @@ static void nl80211_reg_change_event(struct wpa_driver_nl80211_data *drv,
 	if (tb[NL80211_ATTR_REG_TYPE]) {
 		enum nl80211_reg_type type;
 		type = nla_get_u8(tb[NL80211_ATTR_REG_TYPE]);
-		wpa_printf(MSG_DEBUG, " * type=%d", type);
+		wpa_printf(MSG_DEBUG, " ⋆ type=%d", type);
 		switch (type) {
 		case NL80211_REGDOM_TYPE_COUNTRY:
 			data.channel_list_changed.type = REGDOM_TYPE_COUNTRY;
@@ -2606,7 +2606,7 @@ static void nl80211_reg_change_event(struct wpa_driver_nl80211_data *drv,
 		os_strlcpy(data.channel_list_changed.alpha2,
 			   nla_get_string(tb[NL80211_ATTR_REG_ALPHA2]),
 			   sizeof(data.channel_list_changed.alpha2));
-		wpa_printf(MSG_DEBUG, " * alpha2=%s",
+		wpa_printf(MSG_DEBUG, " ⋆ alpha2=%s",
 			   data.channel_list_changed.alpha2);
 	}
 

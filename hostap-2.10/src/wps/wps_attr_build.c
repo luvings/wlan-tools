@@ -22,7 +22,7 @@ int wps_build_public_key(struct wps_data *wps, struct wpabuf *msg)
 {
 	struct wpabuf *pubkey = NULL;
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Public Key");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Public Key");
 	wpabuf_clear_free(wps->dh_privkey);
 	wps->dh_privkey = NULL;
 	if (wps->dev_pw_id != DEV_PW_DEFAULT && wps->wps->dh_privkey &&
@@ -96,7 +96,7 @@ int wps_build_public_key(struct wps_data *wps, struct wpabuf *msg)
 
 int wps_build_req_type(struct wpabuf *msg, enum wps_request_type type)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Request Type");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Request Type");
 	wpabuf_put_be16(msg, ATTR_REQUEST_TYPE);
 	wpabuf_put_be16(msg, 1);
 	wpabuf_put_u8(msg, type);
@@ -106,7 +106,7 @@ int wps_build_req_type(struct wpabuf *msg, enum wps_request_type type)
 
 int wps_build_resp_type(struct wpabuf *msg, enum wps_response_type type)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Response Type (%d)", type);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Response Type (%d)", type);
 	wpabuf_put_be16(msg, ATTR_RESPONSE_TYPE);
 	wpabuf_put_be16(msg, 1);
 	wpabuf_put_u8(msg, type);
@@ -116,7 +116,7 @@ int wps_build_resp_type(struct wpabuf *msg, enum wps_response_type type)
 
 int wps_build_config_methods(struct wpabuf *msg, u16 methods)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Config Methods (%x)", methods);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Config Methods (%x)", methods);
 	wpabuf_put_be16(msg, ATTR_CONFIG_METHODS);
 	wpabuf_put_be16(msg, 2);
 	wpabuf_put_be16(msg, methods);
@@ -128,7 +128,7 @@ int wps_build_uuid_e(struct wpabuf *msg, const u8 *uuid)
 {
 	if (wpabuf_tailroom(msg) < 4 + WPS_UUID_LEN)
 		return -1;
-	wpa_printf(MSG_DEBUG, "WPS:  * UUID-E");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ UUID-E");
 	wpabuf_put_be16(msg, ATTR_UUID_E);
 	wpabuf_put_be16(msg, WPS_UUID_LEN);
 	wpabuf_put_data(msg, uuid, WPS_UUID_LEN);
@@ -138,7 +138,7 @@ int wps_build_uuid_e(struct wpabuf *msg, const u8 *uuid)
 
 int wps_build_dev_password_id(struct wpabuf *msg, u16 id)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Device Password ID (%d)", id);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Device Password ID (%d)", id);
 	wpabuf_put_be16(msg, ATTR_DEV_PASSWORD_ID);
 	wpabuf_put_be16(msg, 2);
 	wpabuf_put_be16(msg, id);
@@ -148,7 +148,7 @@ int wps_build_dev_password_id(struct wpabuf *msg, u16 id)
 
 int wps_build_config_error(struct wpabuf *msg, u16 err)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Configuration Error (%d)", err);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Configuration Error (%d)", err);
 	wpabuf_put_be16(msg, ATTR_CONFIG_ERROR);
 	wpabuf_put_be16(msg, 2);
 	wpabuf_put_be16(msg, err);
@@ -179,7 +179,7 @@ int wps_build_authenticator(struct wps_data *wps, struct wpabuf *msg)
 			       hash) < 0)
 		return -1;
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Authenticator");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Authenticator");
 	wpabuf_put_be16(msg, ATTR_AUTHENTICATOR);
 	wpabuf_put_be16(msg, WPS_AUTHENTICATOR_LEN);
 	wpabuf_put_data(msg, hash, WPS_AUTHENTICATOR_LEN);
@@ -197,7 +197,7 @@ int wps_build_version(struct wpabuf *msg)
 	 */
 	if (wpabuf_tailroom(msg) < 5)
 		return -1;
-	wpa_printf(MSG_DEBUG, "WPS:  * Version (hardcoded 0x10)");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Version (hardcoded 0x10)");
 	wpabuf_put_be16(msg, ATTR_VERSION);
 	wpabuf_put_be16(msg, 1);
 	wpabuf_put_u8(msg, 0x10);
@@ -224,13 +224,13 @@ int wps_build_wfa_ext(struct wpabuf *msg, int req_to_enroll,
 	len = wpabuf_put(msg, 2); /* to be filled */
 	wpabuf_put_be24(msg, WPS_VENDOR_ID_WFA);
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Version2 (0x%x)", WPS_VERSION);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Version2 (0x%x)", WPS_VERSION);
 	wpabuf_put_u8(msg, WFA_ELEM_VERSION2);
 	wpabuf_put_u8(msg, 1);
 	wpabuf_put_u8(msg, WPS_VERSION);
 
 	if (req_to_enroll) {
-		wpa_printf(MSG_DEBUG, "WPS:  * Request to Enroll (1)");
+		wpa_printf(MSG_DEBUG, "WPS:  ⋆ Request to Enroll (1)");
 		wpabuf_put_u8(msg, WFA_ELEM_REQUEST_TO_ENROLL);
 		wpabuf_put_u8(msg, 1);
 		wpabuf_put_u8(msg, 1);
@@ -238,7 +238,7 @@ int wps_build_wfa_ext(struct wpabuf *msg, int req_to_enroll,
 
 	if (auth_macs && auth_macs_count) {
 		size_t i;
-		wpa_printf(MSG_DEBUG, "WPS:  * AuthorizedMACs (count=%d)",
+		wpa_printf(MSG_DEBUG, "WPS:  ⋆ AuthorizedMACs (count=%d)",
 			   (int) auth_macs_count);
 		wpabuf_put_u8(msg, WFA_ELEM_AUTHORIZEDMACS);
 		wpabuf_put_u8(msg, auth_macs_count * ETH_ALEN);
@@ -249,7 +249,7 @@ int wps_build_wfa_ext(struct wpabuf *msg, int req_to_enroll,
 	}
 
 	if (multi_ap_subelem) {
-		wpa_printf(MSG_DEBUG, "WPS:  * Multi-AP (0x%x)",
+		wpa_printf(MSG_DEBUG, "WPS:  ⋆ Multi-AP (0x%x)",
 			   multi_ap_subelem);
 		wpabuf_put_u8(msg, WFA_ELEM_MULTI_AP);
 		wpabuf_put_u8(msg, 1); /* length */
@@ -262,7 +262,7 @@ int wps_build_wfa_ext(struct wpabuf *msg, int req_to_enroll,
 	if (WPS_VERSION > 0x20) {
 		if (wpabuf_tailroom(msg) < 5)
 			return -1;
-		wpa_printf(MSG_DEBUG, "WPS:  * Extensibility Testing - extra "
+		wpa_printf(MSG_DEBUG, "WPS:  ⋆ Extensibility Testing - extra "
 			   "attribute");
 		wpabuf_put_be16(msg, ATTR_EXTENSIBILITY_TEST);
 		wpabuf_put_be16(msg, 1);
@@ -275,7 +275,7 @@ int wps_build_wfa_ext(struct wpabuf *msg, int req_to_enroll,
 
 int wps_build_msg_type(struct wpabuf *msg, enum wps_msg_type msg_type)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Message Type (%d)", msg_type);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Message Type (%d)", msg_type);
 	wpabuf_put_be16(msg, ATTR_MSG_TYPE);
 	wpabuf_put_be16(msg, 1);
 	wpabuf_put_u8(msg, msg_type);
@@ -285,7 +285,7 @@ int wps_build_msg_type(struct wpabuf *msg, enum wps_msg_type msg_type)
 
 int wps_build_enrollee_nonce(struct wps_data *wps, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Enrollee Nonce");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Enrollee Nonce");
 	wpabuf_put_be16(msg, ATTR_ENROLLEE_NONCE);
 	wpabuf_put_be16(msg, WPS_NONCE_LEN);
 	wpabuf_put_data(msg, wps->nonce_e, WPS_NONCE_LEN);
@@ -295,7 +295,7 @@ int wps_build_enrollee_nonce(struct wps_data *wps, struct wpabuf *msg)
 
 int wps_build_registrar_nonce(struct wps_data *wps, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Registrar Nonce");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Registrar Nonce");
 	wpabuf_put_be16(msg, ATTR_REGISTRAR_NONCE);
 	wpabuf_put_be16(msg, WPS_NONCE_LEN);
 	wpabuf_put_data(msg, wps->nonce_r, WPS_NONCE_LEN);
@@ -321,7 +321,7 @@ int wps_build_auth_type_flags(struct wps_data *wps, struct wpabuf *msg)
 		auth_types = wps_force_auth_types;
 	}
 #endif /* CONFIG_WPS_TESTING */
-	wpa_printf(MSG_DEBUG, "WPS:  * Authentication Type Flags (0x%x)",
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Authentication Type Flags (0x%x)",
 		   auth_types);
 	wpabuf_put_be16(msg, ATTR_AUTH_TYPE_FLAGS);
 	wpabuf_put_be16(msg, 2);
@@ -345,7 +345,7 @@ int wps_build_encr_type_flags(struct wps_data *wps, struct wpabuf *msg)
 		encr_types = wps_force_encr_types;
 	}
 #endif /* CONFIG_WPS_TESTING */
-	wpa_printf(MSG_DEBUG, "WPS:  * Encryption Type Flags (0x%x)",
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Encryption Type Flags (0x%x)",
 		   encr_types);
 	wpabuf_put_be16(msg, ATTR_ENCR_TYPE_FLAGS);
 	wpabuf_put_be16(msg, 2);
@@ -356,7 +356,7 @@ int wps_build_encr_type_flags(struct wps_data *wps, struct wpabuf *msg)
 
 int wps_build_conn_type_flags(struct wps_data *wps, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Connection Type Flags");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Connection Type Flags");
 	wpabuf_put_be16(msg, ATTR_CONN_TYPE_FLAGS);
 	wpabuf_put_be16(msg, 1);
 	wpabuf_put_u8(msg, WPS_CONN_ESS);
@@ -366,7 +366,7 @@ int wps_build_conn_type_flags(struct wps_data *wps, struct wpabuf *msg)
 
 int wps_build_assoc_state(struct wps_data *wps, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Association State");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Association State");
 	wpabuf_put_be16(msg, ATTR_ASSOC_STATE);
 	wpabuf_put_be16(msg, 2);
 	wpabuf_put_be16(msg, WPS_ASSOC_NOT_ASSOC);
@@ -378,7 +378,7 @@ int wps_build_key_wrap_auth(struct wps_data *wps, struct wpabuf *msg)
 {
 	u8 hash[SHA256_MAC_LEN];
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Key Wrap Authenticator");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Key Wrap Authenticator");
 	if (hmac_sha256(wps->authkey, WPS_AUTHKEY_LEN, wpabuf_head(msg),
 			wpabuf_len(msg), hash) < 0)
 		return -1;
@@ -397,7 +397,7 @@ int wps_build_encr_settings(struct wps_data *wps, struct wpabuf *msg,
 	const size_t block_size = 16;
 	u8 *iv, *data;
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Encrypted Settings");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Encrypted Settings");
 
 	/* PKCS#5 v2.0 pad */
 	pad_len = block_size - wpabuf_len(plain) % block_size;
@@ -428,7 +428,7 @@ int wps_build_oob_dev_pw(struct wpabuf *msg, u16 dev_pw_id,
 	const u8 *addr[1];
 	u8 pubkey_hash[WPS_HASH_LEN];
 
-	wpa_printf(MSG_DEBUG, "WPS:  * OOB Device Password (dev_pw_id=%u)",
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ OOB Device Password (dev_pw_id=%u)",
 		   dev_pw_id);
 	addr[0] = wpabuf_head(pubkey);
 	hash_len = wpabuf_len(pubkey);
@@ -494,7 +494,7 @@ struct wpabuf * wps_ie_encapsulate(struct wpabuf *data)
 
 int wps_build_mac_addr(struct wpabuf *msg, const u8 *addr)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * MAC Address (" MACSTR ")",
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ MAC Address (" MACSTR ")",
 		   MAC2STR(addr));
 	wpabuf_put_be16(msg, ATTR_MAC_ADDR);
 	wpabuf_put_be16(msg, ETH_ALEN);
@@ -505,7 +505,7 @@ int wps_build_mac_addr(struct wpabuf *msg, const u8 *addr)
 
 int wps_build_rf_bands_attr(struct wpabuf *msg, u8 rf_bands)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * RF Bands (%x)", rf_bands);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ RF Bands (%x)", rf_bands);
 	wpabuf_put_be16(msg, ATTR_RF_BANDS);
 	wpabuf_put_be16(msg, 1);
 	wpabuf_put_u8(msg, rf_bands);
@@ -515,7 +515,7 @@ int wps_build_rf_bands_attr(struct wpabuf *msg, u8 rf_bands)
 
 int wps_build_ap_channel(struct wpabuf *msg, u16 ap_channel)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * AP Channel (%u)", ap_channel);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ AP Channel (%u)", ap_channel);
 	wpabuf_put_be16(msg, ATTR_AP_CHANNEL);
 	wpabuf_put_be16(msg, 2);
 	wpabuf_put_be16(msg, ap_channel);

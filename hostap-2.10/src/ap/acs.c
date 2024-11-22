@@ -554,7 +554,7 @@ static void acs_survey_mode_interference_factor(
 
 		acs_survey_chan_interference_factor(iface, chan);
 
-		wpa_printf(MSG_DEBUG, "ACS:  * interference factor average: %Lg",
+		wpa_printf(MSG_DEBUG, "ACS:  ⋆ interference factor average: %Lg",
 			   chan->interference_factor);
 	}
 }

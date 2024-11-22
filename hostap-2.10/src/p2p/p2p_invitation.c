@@ -195,6 +195,7 @@ void p2p_process_invitation_req(struct p2p_data *p2p, const u8 *sa,
 		return;
 
 	dev = p2p_get_device(p2p, sa);
+
 	if (dev == NULL || (dev->flags & P2P_DEV_PROBE_REQ_ONLY)) {
 		p2p_dbg(p2p, "Invitation Request from unknown peer " MACSTR,
 			MAC2STR(sa));

@@ -48,7 +48,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->capability = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Device Capability %02x "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Device Capability %02x "
 			   "Group Capability %02x",
 			   data[0], data[1]);
 		break;
@@ -59,7 +59,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->device_id = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Device ID " MACSTR,
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Device ID " MACSTR,
 			   MAC2STR(msg->device_id));
 		break;
 	case P2P_ATTR_GROUP_OWNER_INTENT:
@@ -69,7 +69,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->go_intent = data;
-		wpa_printf(MSG_DEBUG, "P2P: * GO Intent: Intent %u "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ GO Intent: Intent %u "
 			   "Tie breaker %u", data[0] >> 1, data[0] & 0x01);
 		break;
 	case P2P_ATTR_STATUS:
@@ -79,11 +79,11 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->status = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Status: %d", data[0]);
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Status: %d", data[0]);
 		break;
 	case P2P_ATTR_LISTEN_CHANNEL:
 		if (len == 0) {
-			wpa_printf(MSG_DEBUG, "P2P: * Listen Channel: Ignore "
+			wpa_printf(MSG_DEBUG, "P2P: ⋆ Listen Channel: Ignore "
 				   "null channel");
 			break;
 		}
@@ -93,14 +93,14 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->listen_channel = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Listen Channel: "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Listen Channel: "
 			   "Country %c%c(0x%02x) Regulatory "
 			   "Class %d Channel Number %d", data[0], data[1],
 			   data[2], data[3], data[4]);
 		break;
 	case P2P_ATTR_OPERATING_CHANNEL:
 		if (len == 0) {
-			wpa_printf(MSG_DEBUG, "P2P: * Operating Channel: "
+			wpa_printf(MSG_DEBUG, "P2P: ⋆ Operating Channel: "
 				   "Ignore null channel");
 			break;
 		}
@@ -110,7 +110,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->operating_channel = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Operating Channel: "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Operating Channel: "
 			   "Country %c%c(0x%02x) Regulatory "
 			   "Class %d Channel Number %d", data[0], data[1],
 			   data[2], data[3], data[4]);
@@ -123,7 +123,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		}
 		msg->channel_list = data;
 		msg->channel_list_len = len;
-		wpa_printf(MSG_DEBUG, "P2P: * Channel List: Country String "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Channel List: Country String "
 			   "'%c%c(0x%02x)'", data[0], data[1], data[2]);
 		wpa_hexdump(MSG_MSGDUMP, "P2P: Channel List",
 			    msg->channel_list, msg->channel_list_len);
@@ -131,7 +131,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 	case P2P_ATTR_GROUP_INFO:
 		msg->group_info = data;
 		msg->group_info_len = len;
-		wpa_printf(MSG_DEBUG, "P2P: * Group Info");
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Group Info");
 		break;
 	case P2P_ATTR_DEVICE_INFO:
 		if (len < ETH_ALEN + 2 + 8 + 1) {
@@ -175,7 +175,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		}
 		p2p_copy_filter_devname(msg->device_name,
 					sizeof(msg->device_name), pos, nlen);
-		wpa_printf(MSG_DEBUG, "P2P: * Device Info: addr " MACSTR
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Device Info: addr " MACSTR
 			   " primary device type %s device name '%s' "
 			   "config methods 0x%x",
 			   MAC2STR(msg->p2p_device_addr),
@@ -190,7 +190,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->config_timeout = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Configuration Timeout");
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Configuration Timeout");
 		break;
 	case P2P_ATTR_INTENDED_INTERFACE_ADDR:
 		if (len < ETH_ALEN) {
@@ -200,7 +200,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->intended_addr = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Intended P2P Interface Address: "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Intended P2P Interface Address: "
 			   MACSTR, MAC2STR(msg->intended_addr));
 		break;
 	case P2P_ATTR_GROUP_BSSID:
@@ -210,7 +210,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->group_bssid = data;
-		wpa_printf(MSG_DEBUG, "P2P: * P2P Group BSSID: " MACSTR,
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ P2P Group BSSID: " MACSTR,
 			   MAC2STR(msg->group_bssid));
 		break;
 	case P2P_ATTR_GROUP_ID:
@@ -221,9 +221,9 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		}
 		msg->group_id = data;
 		msg->group_id_len = len;
-		wpa_printf(MSG_DEBUG, "P2P: * P2P Group ID: Device Address "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ P2P Group ID: Device Address "
 			   MACSTR, MAC2STR(msg->group_id));
-		wpa_hexdump_ascii(MSG_DEBUG, "P2P: * P2P Group ID: SSID",
+		wpa_hexdump_ascii(MSG_DEBUG, "P2P: ⋆ P2P Group ID: SSID",
 				  msg->group_id + ETH_ALEN,
 				  msg->group_id_len - ETH_ALEN);
 		break;
@@ -234,7 +234,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->invitation_flags = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Invitation Flags: bitmap 0x%x",
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Invitation Flags: bitmap 0x%x",
 			   data[0]);
 		break;
 	case P2P_ATTR_MANAGEABILITY:
@@ -244,7 +244,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->manageability = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Manageability: bitmap 0x%x",
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Manageability: bitmap 0x%x",
 			   data[0]);
 		break;
 	case P2P_ATTR_NOTICE_OF_ABSENCE:
@@ -255,7 +255,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		}
 		msg->noa = data;
 		msg->noa_len = len;
-		wpa_printf(MSG_DEBUG, "P2P: * Notice of Absence");
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Notice of Absence");
 		break;
 	case P2P_ATTR_EXT_LISTEN_TIMING:
 		if (len < 4) {
@@ -264,7 +264,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->ext_listen_timing = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Extended Listen Timing "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Extended Listen Timing "
 			   "(period %u msec  interval %u msec)",
 			   WPA_GET_LE16(msg->ext_listen_timing),
 			   WPA_GET_LE16(msg->ext_listen_timing + 2));
@@ -276,7 +276,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->minor_reason_code = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Minor Reason Code: %u",
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Minor Reason Code: %u",
 			   *msg->minor_reason_code);
 		break;
 	case P2P_ATTR_OOB_GO_NEG_CHANNEL:
@@ -286,7 +286,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->oob_go_neg_channel = data;
-		wpa_printf(MSG_DEBUG, "P2P: * OOB GO Neg Channel: "
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ OOB GO Neg Channel: "
 			   "Country %c%c(0x%02x) Operating Class %d "
 			   "Channel Number %d Role %d",
 			   data[0], data[1], data[2], data[3], data[4],
@@ -301,12 +301,12 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		}
 		msg->service_hash_count = len / P2PS_HASH_LEN;
 		msg->service_hash = data;
-		wpa_hexdump(MSG_DEBUG, "P2P: * Service Hash(s)", data, len);
+		wpa_hexdump(MSG_DEBUG, "P2P: ⋆ Service Hash(s)", data, len);
 		break;
 	case P2P_ATTR_SESSION_INFORMATION_DATA:
 		msg->session_info = data;
 		msg->session_info_len = len;
-		wpa_printf(MSG_DEBUG, "P2P: * Service Instance: %u bytes - %p",
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Service Instance: %u bytes - %p",
 			   len, data);
 		break;
 	case P2P_ATTR_CONNECTION_CAPABILITY:
@@ -317,7 +317,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 			return -1;
 		}
 		msg->conn_cap = data;
-		wpa_printf(MSG_DEBUG, "P2P: * Connection Capability: 0x%x",
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Connection Capability: 0x%x",
 			   *msg->conn_cap);
 		break;
 	case P2P_ATTR_ADVERTISEMENT_ID:
@@ -329,7 +329,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		}
 		msg->adv_id = data;
 		msg->adv_mac = &data[sizeof(u32)];
-		wpa_printf(MSG_DEBUG, "P2P: * Advertisement ID %x",
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Advertisement ID %x",
 			   WPA_GET_LE32(data));
 		break;
 	case P2P_ATTR_ADVERTISED_SERVICE:
@@ -350,10 +350,10 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 				break;
 			os_memcpy(str, &data[7], namelen);
 			str[namelen] = '\0';
-			wpa_printf(MSG_DEBUG, "P2P: * Service Instance: %x-%s",
+			wpa_printf(MSG_DEBUG, "P2P: ⋆ Service Instance: %x-%s",
 				   WPA_GET_LE32(data), str);
 		} else {
-			wpa_printf(MSG_DEBUG, "P2P: * Service Instance: %p",
+			wpa_printf(MSG_DEBUG, "P2P: ⋆ Service Instance: %p",
 				   data);
 		}
 		break;
@@ -366,7 +366,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		}
 		msg->session_id = data;
 		msg->session_mac = &data[sizeof(u32)];
-		wpa_printf(MSG_DEBUG, "P2P: * Session ID: %x " MACSTR,
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Session ID: %x " MACSTR,
 			   WPA_GET_LE32(data), MAC2STR(msg->session_mac));
 		break;
 	case P2P_ATTR_FEATURE_CAPABILITY:
@@ -378,7 +378,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		}
 		msg->feature_cap = data;
 		msg->feature_cap_len = len;
-		wpa_printf(MSG_DEBUG, "P2P: * Feature Cap (length=%u)", len);
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Feature Cap (length=%u)", len);
 		break;
 	case P2P_ATTR_PERSISTENT_GROUP:
 	{
@@ -392,7 +392,7 @@ static int p2p_parse_attribute(u8 id, const u8 *data, u16 len,
 		msg->persistent_dev = data;
 		msg->persistent_ssid_len = len - ETH_ALEN;
 		msg->persistent_ssid = &data[ETH_ALEN];
-		wpa_printf(MSG_DEBUG, "P2P: * Persistent Group: " MACSTR " %s",
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Persistent Group: " MACSTR " %s",
 			   MAC2STR(msg->persistent_dev),
 			   wpa_ssid_txt(msg->persistent_ssid,
 					msg->persistent_ssid_len));
@@ -585,7 +585,7 @@ int p2p_parse(const u8 *data, size_t len, struct p2p_message *msg)
 		return -1;
 	}
 	msg->dialog_token = data[0];
-	wpa_printf(MSG_DEBUG, "P2P: * Dialog Token: %d", msg->dialog_token);
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Dialog Token: %d", msg->dialog_token);
 
 	return p2p_parse_ies(data + 1, len - 1, msg);
 }
