@@ -23,7 +23,7 @@ static int wps_build_wps_state(struct wps_data *wps, struct wpabuf *msg)
 		state = wps->wps->wps_state;
 	else
 		state = WPS_STATE_NOT_CONFIGURED;
-	wpa_printf(MSG_DEBUG, "WPS:  * Wi-Fi Protected Setup State (%d)",
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Wi-Fi Protected Setup State (%d)",
 		   state);
 	wpabuf_put_be16(msg, ATTR_WPS_STATE);
 	wpabuf_put_be16(msg, 1);
@@ -50,7 +50,7 @@ static int wps_build_e_hash(struct wps_data *wps, struct wpabuf *msg)
 		return -1;
 	}
 
-	wpa_printf(MSG_DEBUG, "WPS:  * E-Hash1");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ E-Hash1");
 	wpabuf_put_be16(msg, ATTR_E_HASH1);
 	wpabuf_put_be16(msg, SHA256_MAC_LEN);
 	hash = wpabuf_put(msg, SHA256_MAC_LEN);
@@ -66,7 +66,7 @@ static int wps_build_e_hash(struct wps_data *wps, struct wpabuf *msg)
 	hmac_sha256_vector(wps->authkey, WPS_AUTHKEY_LEN, 4, addr, len, hash);
 	wpa_hexdump(MSG_DEBUG, "WPS: E-Hash1", hash, SHA256_MAC_LEN);
 
-	wpa_printf(MSG_DEBUG, "WPS:  * E-Hash2");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ E-Hash2");
 	wpabuf_put_be16(msg, ATTR_E_HASH2);
 	wpabuf_put_be16(msg, SHA256_MAC_LEN);
 	hash = wpabuf_put(msg, SHA256_MAC_LEN);
@@ -82,7 +82,7 @@ static int wps_build_e_hash(struct wps_data *wps, struct wpabuf *msg)
 
 static int wps_build_e_snonce1(struct wps_data *wps, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * E-SNonce1");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ E-SNonce1");
 	wpabuf_put_be16(msg, ATTR_E_SNONCE1);
 	wpabuf_put_be16(msg, WPS_SECRET_NONCE_LEN);
 	wpabuf_put_data(msg, wps->snonce, WPS_SECRET_NONCE_LEN);
@@ -92,7 +92,7 @@ static int wps_build_e_snonce1(struct wps_data *wps, struct wpabuf *msg)
 
 static int wps_build_e_snonce2(struct wps_data *wps, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * E-SNonce2");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ E-SNonce2");
 	wpabuf_put_be16(msg, ATTR_E_SNONCE2);
 	wpabuf_put_be16(msg, WPS_SECRET_NONCE_LEN);
 	wpabuf_put_data(msg, wps->snonce + WPS_SECRET_NONCE_LEN,
@@ -242,7 +242,7 @@ static struct wpabuf * wps_build_m5(struct wps_data *wps)
 
 static int wps_build_cred_ssid(struct wps_data *wps, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * SSID");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ SSID");
 	wpabuf_put_be16(msg, ATTR_SSID);
 	wpabuf_put_be16(msg, wps->wps->ssid_len);
 	wpabuf_put_data(msg, wps->wps->ssid, wps->wps->ssid_len);
@@ -266,7 +266,7 @@ static int wps_build_cred_auth_type(struct wps_data *wps, struct wpabuf *msg)
 	else if (auth_type & WPS_AUTH_OPEN)
 		auth_type = WPS_AUTH_OPEN;
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Authentication Type (0x%x)", auth_type);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Authentication Type (0x%x)", auth_type);
 	wpabuf_put_be16(msg, ATTR_AUTH_TYPE);
 	wpabuf_put_be16(msg, 2);
 	wpabuf_put_be16(msg, auth_type);
@@ -290,7 +290,7 @@ static int wps_build_cred_encr_type(struct wps_data *wps, struct wpabuf *msg)
 			encr_type = WPS_ENCR_TKIP;
 	}
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Encryption Type (0x%x)", encr_type);
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Encryption Type (0x%x)", encr_type);
 	wpabuf_put_be16(msg, ATTR_ENCR_TYPE);
 	wpabuf_put_be16(msg, 2);
 	wpabuf_put_be16(msg, encr_type);
@@ -313,7 +313,7 @@ static int wps_build_cred_network_key(struct wps_data *wps, struct wpabuf *msg)
 		}
 		wpa_hexdump_key(MSG_DEBUG, "WPS: Generated per-device PSK",
 				psk, sizeof(psk));
-		wpa_printf(MSG_DEBUG, "WPS:  * Network Key (len=%u)",
+		wpa_printf(MSG_DEBUG, "WPS:  ⋆ Network Key (len=%u)",
 			   (unsigned int) wps->new_psk_len * 2);
 		wpa_snprintf_hex(hex, sizeof(hex), psk, sizeof(psk));
 		wpabuf_put_be16(msg, ATTR_NETWORK_KEY);
@@ -327,7 +327,7 @@ static int wps_build_cred_network_key(struct wps_data *wps, struct wpabuf *msg)
 		return 0;
 	}
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Network Key (len=%u)",
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Network Key (len=%u)",
 		   (unsigned int) wps->wps->network_key_len);
 	wpabuf_put_be16(msg, ATTR_NETWORK_KEY);
 	wpabuf_put_be16(msg, wps->wps->network_key_len);
@@ -338,7 +338,7 @@ static int wps_build_cred_network_key(struct wps_data *wps, struct wpabuf *msg)
 
 static int wps_build_cred_mac_addr(struct wps_data *wps, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * MAC Address (AP BSSID)");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ MAC Address (AP BSSID)");
 	wpabuf_put_be16(msg, ATTR_MAC_ADDR);
 	wpabuf_put_be16(msg, ETH_ALEN);
 	wpabuf_put_data(msg, wps->wps->dev.mac_addr, ETH_ALEN);
@@ -352,13 +352,13 @@ static int wps_build_ap_settings(struct wps_data *wps, struct wpabuf *plain)
 	int ret;
 
 	if (wps->wps->ap_settings) {
-		wpa_printf(MSG_DEBUG, "WPS:  * AP Settings (pre-configured)");
+		wpa_printf(MSG_DEBUG, "WPS:  ⋆ AP Settings (pre-configured)");
 		wpabuf_put_data(plain, wps->wps->ap_settings,
 				wps->wps->ap_settings_len);
 		return 0;
 	}
 
-	wpa_printf(MSG_DEBUG, "WPS:  * AP Settings based on current configuration");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ AP Settings based on current configuration");
 	start = wpabuf_put(plain, 0);
 	ret = wps_build_cred_ssid(wps, plain) ||
 		wps_build_cred_mac_addr(wps, plain) ||

@@ -22,7 +22,7 @@ void p2p_buf_add_action_hdr(struct wpabuf *buf, u8 subtype, u8 dialog_token)
 
 	wpabuf_put_u8(buf, subtype); /* OUI Subtype */
 	wpabuf_put_u8(buf, dialog_token);
-	wpa_printf(MSG_DEBUG, "P2P: * Dialog Token: %d", dialog_token);
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Dialog Token: %d", dialog_token);
 }
 
 
@@ -35,7 +35,7 @@ void p2p_buf_add_public_action_hdr(struct wpabuf *buf, u8 subtype,
 
 	wpabuf_put_u8(buf, subtype); /* OUI Subtype */
 	wpabuf_put_u8(buf, dialog_token);
-	wpa_printf(MSG_DEBUG, "P2P: * Dialog Token: %d", dialog_token);
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Dialog Token: %d", dialog_token);
 }
 
 
@@ -47,7 +47,7 @@ u8 * p2p_buf_add_ie_hdr(struct wpabuf *buf)
 	wpabuf_put_u8(buf, WLAN_EID_VENDOR_SPECIFIC);
 	len = wpabuf_put(buf, 1); /* IE length to be filled */
 	wpabuf_put_be32(buf, P2P_IE_VENDOR_TYPE);
-	wpa_printf(MSG_DEBUG, "P2P: * P2P IE header");
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ P2P IE header");
 	return len;
 }
 
@@ -66,7 +66,7 @@ void p2p_buf_add_capability(struct wpabuf *buf, u8 dev_capab, u8 group_capab)
 	wpabuf_put_le16(buf, 2);
 	wpabuf_put_u8(buf, dev_capab); /* Device Capabilities */
 	wpabuf_put_u8(buf, group_capab); /* Group Capabilities */
-	wpa_printf(MSG_DEBUG, "P2P: * Capability dev=%02x group=%02x",
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Capability dev=%02x group=%02x",
 		   dev_capab, group_capab);
 }
 
@@ -77,7 +77,7 @@ void p2p_buf_add_go_intent(struct wpabuf *buf, u8 go_intent)
 	wpabuf_put_u8(buf, P2P_ATTR_GROUP_OWNER_INTENT);
 	wpabuf_put_le16(buf, 1);
 	wpabuf_put_u8(buf, go_intent);
-	wpa_printf(MSG_DEBUG, "P2P: * GO Intent: Intent %u Tie breaker %u",
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ GO Intent: Intent %u Tie breaker %u",
 		   go_intent >> 1, go_intent & 0x01);
 }
 
@@ -91,7 +91,7 @@ void p2p_buf_add_listen_channel(struct wpabuf *buf, const char *country,
 	wpabuf_put_data(buf, country, 3);
 	wpabuf_put_u8(buf, reg_class); /* Regulatory Class */
 	wpabuf_put_u8(buf, channel); /* Channel Number */
-	wpa_printf(MSG_DEBUG, "P2P: * Listen Channel: Regulatory Class %u "
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Listen Channel: Regulatory Class %u "
 		   "Channel %u", reg_class, channel);
 }
 
@@ -105,7 +105,7 @@ void p2p_buf_add_operating_channel(struct wpabuf *buf, const char *country,
 	wpabuf_put_data(buf, country, 3);
 	wpabuf_put_u8(buf, reg_class); /* Regulatory Class */
 	wpabuf_put_u8(buf, channel); /* Channel Number */
-	wpa_printf(MSG_DEBUG, "P2P: * Operating Channel: Regulatory Class %u "
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Operating Channel: Regulatory Class %u "
 		   "Channel %u", reg_class, channel);
 }
 
@@ -168,7 +168,7 @@ void p2p_buf_add_channel_list(struct wpabuf *buf, const char *country,
 
 	/* Update attribute length */
 	WPA_PUT_LE16(len, (u8 *) wpabuf_put(buf, 0) - len - 2);
-	wpa_hexdump(MSG_DEBUG, "P2P: * Channel List",
+	wpa_hexdump(MSG_DEBUG, "P2P: ⋆ Channel List",
 		    len + 2, (u8 *) wpabuf_put(buf, 0) - len - 2);
 }
 
@@ -179,7 +179,7 @@ void p2p_buf_add_status(struct wpabuf *buf, u8 status)
 	wpabuf_put_u8(buf, P2P_ATTR_STATUS);
 	wpabuf_put_le16(buf, 1);
 	wpabuf_put_u8(buf, status);
-	wpa_printf(MSG_DEBUG, "P2P: * Status: %d", status);
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Status: %d", status);
 }
 
 
@@ -238,7 +238,7 @@ void p2p_buf_add_device_info(struct wpabuf *buf, struct p2p_data *p2p,
 
 	/* Update attribute length */
 	WPA_PUT_LE16(len, (u8 *) wpabuf_put(buf, 0) - len - 2);
-	wpa_printf(MSG_DEBUG, "P2P: * Device Info");
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Device Info");
 }
 
 
@@ -248,7 +248,7 @@ void p2p_buf_add_device_id(struct wpabuf *buf, const u8 *dev_addr)
 	wpabuf_put_u8(buf, P2P_ATTR_DEVICE_ID);
 	wpabuf_put_le16(buf, ETH_ALEN);
 	wpabuf_put_data(buf, dev_addr, ETH_ALEN);
-	wpa_printf(MSG_DEBUG, "P2P: * Device ID: " MACSTR, MAC2STR(dev_addr));
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Device ID: " MACSTR, MAC2STR(dev_addr));
 }
 
 
@@ -260,7 +260,7 @@ void p2p_buf_add_config_timeout(struct wpabuf *buf, u8 go_timeout,
 	wpabuf_put_le16(buf, 2);
 	wpabuf_put_u8(buf, go_timeout);
 	wpabuf_put_u8(buf, client_timeout);
-	wpa_printf(MSG_DEBUG, "P2P: * Configuration Timeout: GO %d (*10ms)  "
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Configuration Timeout: GO %d (*10ms)  "
 		   "client %d (*10ms)", go_timeout, client_timeout);
 }
 
@@ -271,7 +271,7 @@ void p2p_buf_add_intended_addr(struct wpabuf *buf, const u8 *interface_addr)
 	wpabuf_put_u8(buf, P2P_ATTR_INTENDED_INTERFACE_ADDR);
 	wpabuf_put_le16(buf, ETH_ALEN);
 	wpabuf_put_data(buf, interface_addr, ETH_ALEN);
-	wpa_printf(MSG_DEBUG, "P2P: * Intended P2P Interface Address " MACSTR,
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Intended P2P Interface Address " MACSTR,
 		   MAC2STR(interface_addr));
 }
 
@@ -282,7 +282,7 @@ void p2p_buf_add_group_bssid(struct wpabuf *buf, const u8 *bssid)
 	wpabuf_put_u8(buf, P2P_ATTR_GROUP_BSSID);
 	wpabuf_put_le16(buf, ETH_ALEN);
 	wpabuf_put_data(buf, bssid, ETH_ALEN);
-	wpa_printf(MSG_DEBUG, "P2P: * P2P Group BSSID " MACSTR,
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ P2P Group BSSID " MACSTR,
 		   MAC2STR(bssid));
 }
 
@@ -295,7 +295,7 @@ void p2p_buf_add_group_id(struct wpabuf *buf, const u8 *dev_addr,
 	wpabuf_put_le16(buf, ETH_ALEN + ssid_len);
 	wpabuf_put_data(buf, dev_addr, ETH_ALEN);
 	wpabuf_put_data(buf, ssid, ssid_len);
-	wpa_printf(MSG_DEBUG, "P2P: * P2P Group ID " MACSTR,
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ P2P Group ID " MACSTR,
 		   MAC2STR(dev_addr));
 	wpa_hexdump_ascii(MSG_DEBUG, "P2P: P2P Group ID SSID", ssid, ssid_len);
 }
@@ -307,7 +307,7 @@ void p2p_buf_add_invitation_flags(struct wpabuf *buf, u8 flags)
 	wpabuf_put_u8(buf, P2P_ATTR_INVITATION_FLAGS);
 	wpabuf_put_le16(buf, 1);
 	wpabuf_put_u8(buf, flags);
-	wpa_printf(MSG_DEBUG, "P2P: * Invitation Flags: bitmap 0x%x", flags);
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Invitation Flags: bitmap 0x%x", flags);
 }
 
 
@@ -333,7 +333,7 @@ void p2p_buf_add_noa(struct wpabuf *buf, u8 noa_index, u8 opp_ps, u8 ctwindow,
 	wpabuf_put_u8(buf, (opp_ps ? 0x80 : 0) | (ctwindow & 0x7f));
 	p2p_buf_add_noa_desc(buf, desc1);
 	p2p_buf_add_noa_desc(buf, desc2);
-	wpa_printf(MSG_DEBUG, "P2P: * Notice of Absence");
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Notice of Absence");
 }
 
 
@@ -345,7 +345,7 @@ void p2p_buf_add_ext_listen_timing(struct wpabuf *buf, u16 period,
 	wpabuf_put_le16(buf, 4);
 	wpabuf_put_le16(buf, period);
 	wpabuf_put_le16(buf, interval);
-	wpa_printf(MSG_DEBUG, "P2P: * Extended Listen Timing (period %u msec  "
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Extended Listen Timing (period %u msec  "
 		   "interval %u msec)", period, interval);
 }
 
@@ -378,7 +378,7 @@ void p2p_buf_add_oob_go_neg_channel(struct wpabuf *buf, const char *country,
 	wpabuf_put_u8(buf, oper_class); /* Operating Class */
 	wpabuf_put_u8(buf, channel); /* Channel Number */
 	wpabuf_put_u8(buf, (u8) role); /* Role indication */
-	wpa_printf(MSG_DEBUG, "P2P: * OOB GO Negotiation Channel: Operating "
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ OOB GO Negotiation Channel: Operating "
 		   "Class %u Channel %u Role %d",
 		   oper_class, channel, role);
 }
@@ -394,7 +394,7 @@ void p2p_buf_add_service_hash(struct wpabuf *buf, struct p2p_data *p2p)
 	wpabuf_put_le16(buf, p2p->p2ps_seek_count * P2PS_HASH_LEN);
 	wpabuf_put_data(buf, p2p->p2ps_seek_hash,
 			p2p->p2ps_seek_count * P2PS_HASH_LEN);
-	wpa_hexdump(MSG_DEBUG, "P2P: * Service Hash",
+	wpa_hexdump(MSG_DEBUG, "P2P: ⋆ Service Hash",
 		    p2p->p2ps_seek_hash, p2p->p2ps_seek_count * P2PS_HASH_LEN);
 }
 
@@ -412,7 +412,7 @@ void p2p_buf_add_session_info(struct wpabuf *buf, const char *info)
 
 	if (info) {
 		wpabuf_put_data(buf, info, info_len);
-		wpa_printf(MSG_DEBUG, "P2P: * Session Info Data (%s)", info);
+		wpa_printf(MSG_DEBUG, "P2P: ⋆ Session Info Data (%s)", info);
 	}
 }
 
@@ -423,7 +423,7 @@ void p2p_buf_add_connection_capability(struct wpabuf *buf, u8 connection_cap)
 	wpabuf_put_u8(buf, P2P_ATTR_CONNECTION_CAPABILITY);
 	wpabuf_put_le16(buf, 1);
 	wpabuf_put_u8(buf, connection_cap);
-	wpa_printf(MSG_DEBUG, "P2P: * Connection Capability: 0x%x",
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Connection Capability: 0x%x",
 		   connection_cap);
 }
 
@@ -438,7 +438,7 @@ void p2p_buf_add_advertisement_id(struct wpabuf *buf, u32 id, const u8 *mac)
 	wpabuf_put_le16(buf, (u16) (sizeof(u32) + ETH_ALEN));
 	wpabuf_put_le32(buf, id);
 	wpabuf_put_data(buf, mac, ETH_ALEN);
-	wpa_printf(MSG_DEBUG, "P2P: * Advertisement ID (%x) " MACSTR,
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Advertisement ID (%x) " MACSTR,
 		   id, MAC2STR(mac));
 }
 
@@ -672,7 +672,7 @@ void p2p_buf_add_session_id(struct wpabuf *buf, u32 id, const u8 *mac)
 	wpabuf_put_le16(buf, (u16) (sizeof(u32) + ETH_ALEN));
 	wpabuf_put_le32(buf, id);
 	wpabuf_put_data(buf, mac, ETH_ALEN);
-	wpa_printf(MSG_DEBUG, "P2P: * Session ID Info (%x) " MACSTR,
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Session ID Info (%x) " MACSTR,
 		   id, MAC2STR(mac));
 }
 
@@ -686,7 +686,7 @@ void p2p_buf_add_feature_capability(struct wpabuf *buf, u16 len, const u8 *mask)
 	wpabuf_put_u8(buf, P2P_ATTR_FEATURE_CAPABILITY);
 	wpabuf_put_le16(buf, len);
 	wpabuf_put_data(buf, mask, len);
-	wpa_printf(MSG_DEBUG, "P2P: * Feature Capability (%d)", len);
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ Feature Capability (%d)", len);
 }
 
 
@@ -698,7 +698,7 @@ void p2p_buf_add_persistent_group_info(struct wpabuf *buf, const u8 *dev_addr,
 	wpabuf_put_le16(buf, ETH_ALEN + ssid_len);
 	wpabuf_put_data(buf, dev_addr, ETH_ALEN);
 	wpabuf_put_data(buf, ssid, ssid_len);
-	wpa_printf(MSG_DEBUG, "P2P: * P2P Group ID " MACSTR,
+	wpa_printf(MSG_DEBUG, "P2P: ⋆ P2P Group ID " MACSTR,
 		   MAC2STR(dev_addr));
 }
 

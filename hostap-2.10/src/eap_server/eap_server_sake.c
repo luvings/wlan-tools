@@ -130,10 +130,10 @@ static struct wpabuf * eap_sake_build_identity(struct eap_sm *sm,
 		return NULL;
 	}
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_PERM_ID_REQ");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_PERM_ID_REQ");
 	eap_sake_add_attr(msg, EAP_SAKE_AT_PERM_ID_REQ, NULL, 2);
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_SERVERID");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_SERVERID");
 	eap_sake_add_attr(msg, EAP_SAKE_AT_SERVERID,
 			  sm->cfg->server_id, sm->cfg->server_id_len);
 
@@ -165,11 +165,11 @@ static struct wpabuf * eap_sake_build_challenge(struct eap_sm *sm,
 		return NULL;
 	}
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_RAND_S");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_RAND_S");
 	eap_sake_add_attr(msg, EAP_SAKE_AT_RAND_S,
 			  data->rand_s, EAP_SAKE_RAND_LEN);
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_SERVERID");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_SERVERID");
 	eap_sake_add_attr(msg, EAP_SAKE_AT_SERVERID,
 			  sm->cfg->server_id, sm->cfg->server_id_len);
 
@@ -193,7 +193,7 @@ static struct wpabuf * eap_sake_build_confirm(struct eap_sm *sm,
 		return NULL;
 	}
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_MIC_S");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_MIC_S");
 	wpabuf_put_u8(msg, EAP_SAKE_AT_MIC_S);
 	wpabuf_put_u8(msg, 2 + EAP_SAKE_MIC_LEN);
 	mic = wpabuf_put(msg, EAP_SAKE_MIC_LEN);

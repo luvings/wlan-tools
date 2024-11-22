@@ -739,7 +739,7 @@ struct wpabuf * wps_build_nfc_handover_req(struct wps_context *ctx,
 
 static int wps_build_ssid(struct wpabuf *msg, struct wps_context *wps)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * SSID");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ SSID");
 	wpa_hexdump_ascii(MSG_DEBUG, "WPS: SSID in Connection Handover Select",
 			  wps->ssid, wps->ssid_len);
 	wpabuf_put_be16(msg, ATTR_SSID);

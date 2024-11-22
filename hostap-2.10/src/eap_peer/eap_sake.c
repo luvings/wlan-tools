@@ -170,7 +170,7 @@ static struct wpabuf * eap_sake_process_identity(struct eap_sm *sm,
 	if (resp == NULL)
 		return NULL;
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_PEERID");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_PEERID");
 	eap_sake_add_attr(resp, EAP_SAKE_AT_PEERID,
 			  data->peerid, data->peerid_len);
 
@@ -252,17 +252,17 @@ static struct wpabuf * eap_sake_process_challenge(struct eap_sm *sm,
 	if (resp == NULL)
 		return NULL;
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_RAND_P");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_RAND_P");
 	eap_sake_add_attr(resp, EAP_SAKE_AT_RAND_P,
 			  data->rand_p, EAP_SAKE_RAND_LEN);
 
 	if (data->peerid) {
-		wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_PEERID");
+		wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_PEERID");
 		eap_sake_add_attr(resp, EAP_SAKE_AT_PEERID,
 				  data->peerid, data->peerid_len);
 	}
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_MIC_P");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_MIC_P");
 	wpabuf_put_u8(resp, EAP_SAKE_AT_MIC_P);
 	wpabuf_put_u8(resp, 2 + EAP_SAKE_MIC_LEN);
 	rpos = wpabuf_put(resp, EAP_SAKE_MIC_LEN);
@@ -344,7 +344,7 @@ static struct wpabuf * eap_sake_process_confirm(struct eap_sm *sm,
 	if (resp == NULL)
 		return NULL;
 
-	wpa_printf(MSG_DEBUG, "EAP-SAKE: * AT_MIC_P");
+	wpa_printf(MSG_DEBUG, "EAP-SAKE: ⋆ AT_MIC_P");
 	wpabuf_put_u8(resp, EAP_SAKE_AT_MIC_P);
 	wpabuf_put_u8(resp, 2 + EAP_SAKE_MIC_LEN);
 	rpos = wpabuf_put(resp, EAP_SAKE_MIC_LEN);
