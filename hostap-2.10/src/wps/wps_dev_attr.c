@@ -16,7 +16,7 @@
 int wps_build_manufacturer(struct wps_device_data *dev, struct wpabuf *msg)
 {
 	size_t len;
-	wpa_printf(MSG_DEBUG, "WPS:  * Manufacturer");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Manufacturer");
 	wpabuf_put_be16(msg, ATTR_MANUFACTURER);
 	len = dev->manufacturer ? os_strlen(dev->manufacturer) : 0;
 #ifndef CONFIG_WPS_STRICT
@@ -40,7 +40,7 @@ int wps_build_manufacturer(struct wps_device_data *dev, struct wpabuf *msg)
 int wps_build_model_name(struct wps_device_data *dev, struct wpabuf *msg)
 {
 	size_t len;
-	wpa_printf(MSG_DEBUG, "WPS:  * Model Name");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Model Name");
 	wpabuf_put_be16(msg, ATTR_MODEL_NAME);
 	len = dev->model_name ? os_strlen(dev->model_name) : 0;
 #ifndef CONFIG_WPS_STRICT
@@ -64,7 +64,7 @@ int wps_build_model_name(struct wps_device_data *dev, struct wpabuf *msg)
 int wps_build_model_number(struct wps_device_data *dev, struct wpabuf *msg)
 {
 	size_t len;
-	wpa_printf(MSG_DEBUG, "WPS:  * Model Number");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Model Number");
 	wpabuf_put_be16(msg, ATTR_MODEL_NUMBER);
 	len = dev->model_number ? os_strlen(dev->model_number) : 0;
 #ifndef CONFIG_WPS_STRICT
@@ -88,7 +88,7 @@ int wps_build_model_number(struct wps_device_data *dev, struct wpabuf *msg)
 int wps_build_serial_number(struct wps_device_data *dev, struct wpabuf *msg)
 {
 	size_t len;
-	wpa_printf(MSG_DEBUG, "WPS:  * Serial Number");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Serial Number");
 	wpabuf_put_be16(msg, ATTR_SERIAL_NUMBER);
 	len = dev->serial_number ? os_strlen(dev->serial_number) : 0;
 #ifndef CONFIG_WPS_STRICT
@@ -111,7 +111,7 @@ int wps_build_serial_number(struct wps_device_data *dev, struct wpabuf *msg)
 
 int wps_build_primary_dev_type(struct wps_device_data *dev, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * Primary Device Type");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Primary Device Type");
 	wpabuf_put_be16(msg, ATTR_PRIMARY_DEV_TYPE);
 	wpabuf_put_be16(msg, WPS_DEV_TYPE_LEN);
 	wpabuf_put_data(msg, dev->pri_dev_type, WPS_DEV_TYPE_LEN);
@@ -125,7 +125,7 @@ int wps_build_secondary_dev_type(struct wps_device_data *dev,
 	if (!dev->num_sec_dev_types)
 		return 0;
 
-	wpa_printf(MSG_DEBUG, "WPS:  * Secondary Device Type");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Secondary Device Type");
 	wpabuf_put_be16(msg, ATTR_SECONDARY_DEV_TYPE_LIST);
 	wpabuf_put_be16(msg, WPS_DEV_TYPE_LEN * dev->num_sec_dev_types);
 	wpabuf_put_data(msg, dev->sec_dev_type,
@@ -158,7 +158,7 @@ int wps_build_req_dev_type(struct wps_device_data *dev, struct wpabuf *msg,
 int wps_build_dev_name(struct wps_device_data *dev, struct wpabuf *msg)
 {
 	size_t len;
-	wpa_printf(MSG_DEBUG, "WPS:  * Device Name");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ Device Name");
 	wpabuf_put_be16(msg, ATTR_DEV_NAME);
 	len = dev->device_name ? os_strlen(dev->device_name) : 0;
 #ifndef CONFIG_WPS_STRICT
@@ -194,7 +194,7 @@ int wps_build_device_attrs(struct wps_device_data *dev, struct wpabuf *msg)
 
 int wps_build_os_version(struct wps_device_data *dev, struct wpabuf *msg)
 {
-	wpa_printf(MSG_DEBUG, "WPS:  * OS Version");
+	wpa_printf(MSG_DEBUG, "WPS:  ⋆ OS Version");
 	wpabuf_put_be16(msg, ATTR_OS_VERSION);
 	wpabuf_put_be16(msg, 4);
 	wpabuf_put_be32(msg, 0x80000000 | dev->os_version);
@@ -205,7 +205,7 @@ int wps_build_os_version(struct wps_device_data *dev, struct wpabuf *msg)
 int wps_build_vendor_ext_m1(struct wps_device_data *dev, struct wpabuf *msg)
 {
 	if (dev->vendor_ext_m1 != NULL) {
-		wpa_hexdump(MSG_DEBUG, "WPS:  * Vendor Extension M1",
+		wpa_hexdump(MSG_DEBUG, "WPS:  ⋆ Vendor Extension M1",
 			    wpabuf_head_u8(dev->vendor_ext_m1),
 			    wpabuf_len(dev->vendor_ext_m1));
 		wpabuf_put_be16(msg, ATTR_VENDOR_EXT);
@@ -230,7 +230,7 @@ int wps_build_vendor_ext(struct wps_device_data *dev, struct wpabuf *msg)
 	for (i = 0; i < MAX_WPS_VENDOR_EXTENSIONS; i++) {
 		if (dev->vendor_ext[i] == NULL)
 			continue;
-		wpa_hexdump(MSG_DEBUG, "WPS:  * Vendor Extension",
+		wpa_hexdump(MSG_DEBUG, "WPS:  ⋆ Vendor Extension",
 			    wpabuf_head_u8(dev->vendor_ext[i]),
 			    wpabuf_len(dev->vendor_ext[i]));
 		wpabuf_put_be16(msg, ATTR_VENDOR_EXT);
@@ -247,7 +247,7 @@ int wps_build_application_ext(struct wps_device_data *dev, struct wpabuf *msg)
 	if (!dev->application_ext)
 		return 0;
 
-	wpa_hexdump_buf(MSG_DEBUG, "WPS:  * Application Extension",
+	wpa_hexdump_buf(MSG_DEBUG, "WPS:  ⋆ Application Extension",
 			dev->application_ext);
 	wpabuf_put_be16(msg, ATTR_APPLICATION_EXT);
 	wpabuf_put_be16(msg, wpabuf_len(dev->application_ext));
