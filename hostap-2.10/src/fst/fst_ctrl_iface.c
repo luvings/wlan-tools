@@ -710,6 +710,8 @@ static void fst_ctrl_iface_on_iface_state_changed(struct fst_iface *i,
 
 static int fst_ctrl_iface_on_iface_added(struct fst_iface *i)
 {
+	LOGV("");
+
 	fst_ctrl_iface_on_iface_state_changed(i, true);
 	return 0;
 }
@@ -717,6 +719,8 @@ static int fst_ctrl_iface_on_iface_added(struct fst_iface *i)
 
 static void fst_ctrl_iface_on_iface_removed(struct fst_iface *i)
 {
+	LOGV("");
+
 	fst_ctrl_iface_on_iface_state_changed(i, false);
 }
 
@@ -725,6 +729,8 @@ static void fst_ctrl_iface_on_event(enum fst_event_type event_type,
 				    struct fst_iface *i, struct fst_session *s,
 				    const union fst_event_extra *extra)
 {
+	LOGV("");
+
 	u32 session_id = s ? fst_session_get_id(s) : FST_INVALID_SESSION_ID;
 
 	fst_ctrl_iface_notify(i, session_id, event_type, extra);

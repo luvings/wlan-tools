@@ -427,6 +427,8 @@ static void random_write_entropy(void)
 
 void random_init(const char *entropy_file)
 {
+	LOGV("");
+
 	os_free(random_entropy_file);
 	if (entropy_file)
 		random_entropy_file = os_strdup(entropy_file);

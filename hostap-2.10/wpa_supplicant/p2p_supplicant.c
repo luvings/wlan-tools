@@ -4123,6 +4123,8 @@ int wpas_p2p_add_p2pdev_interface(struct wpa_supplicant *wpa_s,
 	int ret;
 	const u8 *if_addr = NULL;
 
+	LOGV("");
+
 	ret = os_snprintf(ifname, sizeof(ifname), P2P_MGMT_DEVICE_PREFIX "%s",
 			  wpa_s->ifname);
 	if (os_snprintf_error(sizeof(ifname), ret))

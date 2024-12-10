@@ -15,6 +15,8 @@
 static inline void * wpa_drv_init(struct wpa_supplicant *wpa_s,
 				  const char *ifname)
 {
+	LOGV("ifname='%s'", ifname);
+
 	if (wpa_s->driver->init2)
 		return wpa_s->driver->init2(wpa_s, ifname,
 					    wpa_s->global_drv_priv);
@@ -302,6 +304,8 @@ static inline struct hostapd_hw_modes *
 wpa_drv_get_hw_feature_data(struct wpa_supplicant *wpa_s, u16 *num_modes,
 			    u16 *flags, u8 *dfs_domain)
 {
+	LOGV("");
+
 	if (wpa_s->driver->get_hw_feature_data)
 		return wpa_s->driver->get_hw_feature_data(wpa_s->drv_priv,
 							  num_modes, flags,

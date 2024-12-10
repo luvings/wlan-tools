@@ -30,6 +30,8 @@ static int wpa_config_validate_network(struct wpa_ssid *ssid, int line)
 {
 	int errors = 0;
 
+	LOGV("");
+
 	if (ssid->passphrase) {
 		if (ssid->psk_set) {
 			wpa_printf(MSG_ERROR, "Line %d: both PSK and "
@@ -81,8 +83,8 @@ static struct wpa_ssid * wpa_config_read_network(FILE *f, int *line, int id)
 	int errors = 0, end = 0;
 	char buf[2000], *pos, *pos2;
 
-	wpa_printf(MSG_MSGDUMP, "Line: %d - start of a new network block",
-		   *line);
+	wpa_printf(MSG_MSGDUMP, "Line: %d - start of a new network block, id=%d",
+		   *line, id);
 	ssid = os_zalloc(sizeof(*ssid));
 	if (ssid == NULL)
 		return NULL;

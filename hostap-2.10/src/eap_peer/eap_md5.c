@@ -103,6 +103,8 @@ int eap_peer_md5_register(void)
 {
 	struct eap_method *eap;
 
+	LOGV("");
+
 	eap = eap_peer_method_alloc(EAP_PEER_METHOD_INTERFACE_VERSION,
 				    EAP_VENDOR_IETF, EAP_TYPE_MD5, "MD5");
 	if (eap == NULL)

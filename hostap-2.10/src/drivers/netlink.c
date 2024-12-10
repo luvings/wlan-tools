@@ -43,6 +43,8 @@ static void netlink_receive(int sock, void *eloop_ctx, void *sock_ctx)
 	struct nlmsghdr *h;
 	int max_events = 10;
 
+	LOGV("");
+
 try_again:
 	fromlen = sizeof(from);
 	left = recvfrom(sock, buf, sizeof(buf), MSG_DONTWAIT,
@@ -93,6 +95,8 @@ struct netlink_data * netlink_init(struct netlink_config *cfg)
 	struct netlink_data *netlink;
 	struct sockaddr_nl local;
 
+	LOGV("");
+
 	netlink = os_zalloc(sizeof(*netlink));
 	if (netlink == NULL)
 		return NULL;
@@ -120,6 +124,12 @@ struct netlink_data * netlink_init(struct netlink_config *cfg)
 				 NULL);
 
 	netlink->cfg = cfg;
+
+	struct sockaddr_in sin;
+	socklen_t sin_len = sizeof(sin);
+
+	if (getsockname(netlink->sock, (struct sockaddr *) &sin, &sin_len) == 0)
+		LOGV("getsockname: ip='%s', port=%d", inet_ntoa(sin.sin_addr), ntohs(sin.sin_port));
 
 	return netlink;
 }

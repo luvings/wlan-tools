@@ -3208,6 +3208,8 @@ struct wpa_driver_ops wpa_driver_ndis_ops;
 
 void driver_ndis_init_ops(void)
 {
+	LOGV("");
+
 	os_memset(&wpa_driver_ndis_ops, 0, sizeof(wpa_driver_ndis_ops));
 	wpa_driver_ndis_ops.name = ndis_drv_name;
 	wpa_driver_ndis_ops.desc = ndis_drv_desc;

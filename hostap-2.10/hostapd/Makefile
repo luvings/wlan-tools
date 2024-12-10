@@ -25,7 +25,7 @@ CFLAGS += $(EXTRA_CFLAGS)
 CFLAGS += -I$(abspath ../src)
 CFLAGS += -I$(abspath ../src/utils)
 
-export BINDIR ?= /usr/local/bin/
+export BINDIR ?= /usr/sbin/
 
 ifndef CONFIG_NO_GITVER
 # Add VERSION_STR postfix for builds from a git repository

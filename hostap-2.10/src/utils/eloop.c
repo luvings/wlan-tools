@@ -162,6 +162,8 @@ static void eloop_trace_sock_remove_ref(struct eloop_sock_table *table)
 
 int eloop_init(void)
 {
+	LOGV("");
+
 	os_memset(&eloop, 0, sizeof(eloop));
 	dl_list_init(&eloop.timeout);
 #ifdef CONFIG_ELOOP_EPOLL
@@ -593,6 +595,8 @@ static void eloop_sock_table_dispatch(struct eloop_sock_table *table,
 				      fd_set *fds)
 {
 	size_t i;
+
+	LOGV("");
 
 	if (table == NULL || table->table == NULL)
 		return;
@@ -1094,6 +1098,8 @@ void eloop_run(void)
 	if (rfds == NULL || wfds == NULL || efds == NULL)
 		goto out;
 #endif /* CONFIG_ELOOP_SELECT */
+
+	LOGV("");
 
 	while (!eloop.terminate &&
 	       (!dl_list_empty(&eloop.timeout) || eloop.readers.count > 0 ||

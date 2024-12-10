@@ -1355,6 +1355,8 @@ wpa_supplicant_global_ctrl_iface_init(struct wpa_global *global)
 {
 	struct ctrl_iface_global_priv *priv;
 
+	LOGV("");
+
 	priv = os_zalloc(sizeof(*priv));
 	if (priv == NULL)
 		return NULL;

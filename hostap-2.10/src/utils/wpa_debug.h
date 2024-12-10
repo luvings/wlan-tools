@@ -28,6 +28,8 @@ enum {
 		wpa_printf(MSG_EXCESSIVE, "%s:%u: " format, __func__, __LINE__, ##__VA_ARGS__);	\
 	} while (0)
 
+#define F2S(__ff)		#__ff
+
 #ifdef CONFIG_NO_STDOUT_DEBUG
 
 #define wpa_debug_print_timestamp() do { } while (0)

@@ -4916,8 +4916,9 @@ static int select_driver(struct wpa_supplicant *wpa_s, int i)
 		}
 	}
 
-	wpa_s->driver = wpa_drivers[i];
-	wpa_s->global_drv_priv = global->drv_priv[i];
+	LOGV("select i=%d, name='%s'", i, wpa_drivers[i]->name);
+	wpa_s->driver = wpa_drivers[i];				// struct wpa_driver_ops *
+	wpa_s->global_drv_priv = global->drv_priv[i];		// struct nl80211_global *
 
 	return 0;
 }
@@ -4929,6 +4930,8 @@ static int wpa_supplicant_set_driver(struct wpa_supplicant *wpa_s,
 	int i;
 	size_t len;
 	const char *pos, *driver = name;
+
+	LOGV("name='%s'", name);
 
 	if (wpa_s == NULL)
 		return -1;
@@ -4958,8 +4961,7 @@ static int wpa_supplicant_set_driver(struct wpa_supplicant *wpa_s,
 
 		for (i = 0; wpa_drivers[i]; i++) {
 			if (os_strlen(wpa_drivers[i]->name) == len &&
-			    os_strncmp(driver, wpa_drivers[i]->name, len) ==
-			    0) {
+			    os_strncmp(driver, wpa_drivers[i]->name, len) == 0) {
 				/* First driver that succeeds wins */
 				if (select_driver(wpa_s, i) == 0)
 					return 0;
@@ -6455,12 +6457,15 @@ static int wpas_init_driver(struct wpa_supplicant *wpa_s,
 {
 	const char *ifname, *driver, *rn;
 
+	LOGV("");
+
 	driver = iface->driver;
+
 next_driver:
 	if (wpa_supplicant_set_driver(wpa_s, driver) < 0)
 		return -1;
 
-	wpa_s->drv_priv = wpa_drv_init(wpa_s, wpa_s->ifname);
+	wpa_s->drv_priv = wpa_drv_init(wpa_s, wpa_s->ifname);		// struct i802_bss *
 	if (wpa_s->drv_priv == NULL) {
 		const char *pos;
 		int level = MSG_ERROR;
@@ -6568,6 +6573,7 @@ static int wpa_supplicant_init_iface(struct wpa_supplicant *wpa_s,
 #else /* CONFIG_BACKEND_FILE */
 		wpa_s->confname = os_strdup(iface->confname);
 #endif /* CONFIG_BACKEND_FILE */
+
 		wpa_s->conf = wpa_config_read(wpa_s->confname, NULL);
 		if (wpa_s->conf == NULL) {
 			wpa_printf(MSG_ERROR, "Failed to read or parse "
@@ -6621,6 +6627,7 @@ static int wpa_supplicant_init_iface(struct wpa_supplicant *wpa_s,
 			   iface->ifname);
 		return -1;
 	}
+
 	os_strlcpy(wpa_s->ifname, iface->ifname, sizeof(wpa_s->ifname));
 #ifdef CONFIG_MATCH_IFACE
 	wpa_s->matched = iface->matched;
@@ -7087,6 +7094,8 @@ struct wpa_supplicant * wpa_supplicant_add_iface(struct wpa_global *global,
 	struct wpa_interface t_iface;
 	struct wpa_ssid *ssid;
 
+	LOGV("");
+
 	if (global == NULL || iface == NULL)
 		return NULL;
 
@@ -7111,6 +7120,7 @@ struct wpa_supplicant * wpa_supplicant_add_iface(struct wpa_global *global,
 		t_iface.ctrl_interface =
 			global->params.override_ctrl_interface;
 	}
+
 	if (wpa_supplicant_init_iface(wpa_s, &t_iface)) {
 		wpa_printf(MSG_DEBUG, "Failed to add interface %s",
 			   iface->ifname);
@@ -7129,7 +7139,7 @@ struct wpa_supplicant * wpa_supplicant_add_iface(struct wpa_global *global,
 			wpas_notify_network_added(wpa_s, ssid);
 	}
 
-	wpa_s->next = global->ifaces;
+	wpa_s->next = global->ifaces;	// 1st call to this, global->ifaces = NULL
 	global->ifaces = wpa_s;
 
 	wpa_dbg(wpa_s, MSG_DEBUG, "Added interface %s", wpa_s->ifname);
@@ -7277,6 +7287,8 @@ static void wpas_periodic(void *eloop_ctx, void *timeout_ctx)
 	struct wpa_global *global = eloop_ctx;
 	struct wpa_supplicant *wpa_s;
 
+	LOGV("");
+
 	eloop_register_timeout(WPA_SUPPLICANT_CLEANUP_INTERVAL, 0,
 			       wpas_periodic, global, NULL);
 
@@ -7387,13 +7399,12 @@ struct wpa_global * wpa_supplicant_init(struct wpa_params *params)
 		global->params.conf_p2p_dev =
 			os_strdup(params->conf_p2p_dev);
 #endif /* CONFIG_P2P */
-	wpa_debug_level = global->params.wpa_debug_level =
-		params->wpa_debug_level;
-	wpa_debug_show_keys = global->params.wpa_debug_show_keys =
-		params->wpa_debug_show_keys;
-	wpa_debug_timestamp = global->params.wpa_debug_timestamp =
-		params->wpa_debug_timestamp;
+	wpa_debug_level = global->params.wpa_debug_level = params->wpa_debug_level;
+	wpa_debug_show_keys = global->params.wpa_debug_show_keys = params->wpa_debug_show_keys;
+	wpa_debug_timestamp = global->params.wpa_debug_timestamp = params->wpa_debug_timestamp;
 
+	LOGV("wpa_debug_level=%d, wpa_debug_show_keys=%d, wpa_debug_timestamp=%d",
+		wpa_debug_level, wpa_debug_show_keys, wpa_debug_timestamp);
 	wpa_printf(MSG_DEBUG, "wpa_supplicant v%s", VERSION_STR);
 
 	if (eloop_init()) {
@@ -7415,13 +7426,18 @@ struct wpa_global * wpa_supplicant_init(struct wpa_params *params)
 		return NULL;
 	}
 
-	for (i = 0; wpa_drivers[i]; i++)
+	for (i = 0; wpa_drivers[i]; i++) {
+		LOGV("wpa_drivers[%d]: name='%s', desc='%s'", i, wpa_drivers[i]->name, wpa_drivers[i]->desc);
 		global->drv_count++;
+	}
+
+	LOGV("global->drv_count=%ld", global->drv_count);
 	if (global->drv_count == 0) {
 		wpa_printf(MSG_ERROR, "No drivers enabled");
 		wpa_supplicant_deinit(global);
 		return NULL;
 	}
+
 	global->drv_priv = os_calloc(global->drv_count, sizeof(void *));
 	if (global->drv_priv == NULL) {
 		wpa_supplicant_deinit(global);

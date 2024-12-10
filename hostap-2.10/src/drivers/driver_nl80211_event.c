@@ -3123,6 +3123,8 @@ int process_global_event(struct nl_msg *msg, void *arg)
 	int wdev_id_set = 0;
 	int wiphy_idx_set = 0;
 
+	LOGV("");
+
 	nla_parse(tb, NL80211_ATTR_MAX, genlmsg_attrdata(gnlh, 0),
 		  genlmsg_attrlen(gnlh, 0), NULL);
 

@@ -342,6 +342,8 @@ struct wpas_dbus_priv * wpas_dbus_init(struct wpa_global *global)
 {
 	struct wpas_dbus_priv *priv;
 
+	LOGV("");
+
 	priv = os_zalloc(sizeof(*priv));
 	if (priv == NULL)
 		return NULL;

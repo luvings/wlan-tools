@@ -25,6 +25,8 @@ int eap_register_methods(void)
 {
 	int ret = 0;
 
+	LOGV("");
+
 #ifdef EAP_MD5
 	if (ret == 0)
 		ret = eap_peer_md5_register();

@@ -1365,6 +1365,8 @@ int wpa_supplicant_init_wpa(struct wpa_supplicant *wpa_s)
 #ifndef CONFIG_NO_WPA
 	struct wpa_sm_ctx *ctx;
 
+	LOGV("");
+
 	wpa_s->ptksa = ptksa_cache_init();
 	if (!wpa_s->ptksa) {
 		wpa_printf(MSG_ERROR, "Failed to allocate PTKSA");

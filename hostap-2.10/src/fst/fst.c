@@ -104,6 +104,8 @@ void fst_detach(struct fst_iface *iface)
 
 int fst_global_init(void)
 {
+	LOGV("");
+
 	dl_list_init(&fst_global_groups_list);
 	dl_list_init(&fst_global_ctrls_list);
 	fst_session_global_init();

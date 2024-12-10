@@ -68,6 +68,8 @@ static int wpa_config_parse_str(const struct parse_data *data,
 	size_t res_len, *dst_len, prev_len;
 	char **dst, *tmp;
 
+	LOGV("");
+
 	if (os_strcmp(value, "NULL") == 0) {
 		wpa_printf(MSG_DEBUG, "Unset configuration string '%s'",
 			   data->name);
@@ -183,6 +185,8 @@ static char * wpa_config_write_str(const struct parse_data *data,
 	size_t len;
 	char **src;
 
+	LOGV("");
+
 	src = (char **) (((u8 *) ssid) + (long) data->param1);
 	if (*src == NULL)
 		return NULL;
@@ -203,6 +207,8 @@ static int wpa_config_parse_int(const struct parse_data *data,
 {
 	int val, *dst;
 	char *end;
+
+	LOGV("");
 
 	dst = (int *) (((u8 *) ssid) + (long) data->param1);
 	val = strtol(value, &end, 0);
@@ -243,6 +249,8 @@ static char * wpa_config_write_int(const struct parse_data *data,
 {
 	int *src, res;
 	char *value;
+
+	LOGV("");
 
 	src = (int *) (((u8 *) ssid) + (long) data->param1);
 
@@ -542,6 +550,8 @@ static int wpa_config_parse_psk(const struct parse_data *data,
 				struct wpa_ssid *ssid, int line,
 				const char *value)
 {
+	LOGV("");
+
 #ifdef CONFIG_EXT_PASSWORD
 	if (os_strncmp(value, "ext:", 4) == 0) {
 		str_clear_free(ssid->passphrase);
@@ -620,6 +630,8 @@ static int wpa_config_parse_psk(const struct parse_data *data,
 static char * wpa_config_write_psk(const struct parse_data *data,
 				   struct wpa_ssid *ssid)
 {
+	LOGV("");
+
 #ifdef CONFIG_EXT_PASSWORD
 	if (ssid->ext_psk) {
 		size_t len = 4 + os_strlen(ssid->ext_psk) + 1;
@@ -656,6 +668,8 @@ static int wpa_config_parse_proto(const struct parse_data *data,
 {
 	int val = 0, last, errors = 0;
 	char *start, *end, *buf;
+
+	LOGV("");
 
 	buf = os_strdup(value);
 	if (buf == NULL)
@@ -698,7 +712,7 @@ static int wpa_config_parse_proto(const struct parse_data *data,
 	}
 
 	if (!errors && ssid->proto == val)
-		return 1;
+		;	//return 1;
 	wpa_printf(MSG_MSGDUMP, "proto: 0x%x", val);
 	ssid->proto = val;
 	return errors ? -1 : 0;
@@ -711,6 +725,8 @@ static char * wpa_config_write_proto(const struct parse_data *data,
 {
 	int ret;
 	char *buf, *pos, *end;
+
+	LOGV("");
 
 	pos = buf = os_zalloc(20);
 	if (buf == NULL)
@@ -757,6 +773,8 @@ static int wpa_config_parse_key_mgmt(const struct parse_data *data,
 {
 	int val = 0, last, errors = 0;
 	char *start, *end, *buf;
+
+	LOGV("");
 
 	buf = os_strdup(value);
 	if (buf == NULL)
@@ -858,7 +876,7 @@ static int wpa_config_parse_key_mgmt(const struct parse_data *data,
 	}
 
 	if (!errors && ssid->key_mgmt == val)
-		return 1;
+		;	//return 1;
 	wpa_printf(MSG_MSGDUMP, "key_mgmt: 0x%x", val);
 	ssid->key_mgmt = val;
 	return errors ? -1 : 0;
@@ -871,6 +889,8 @@ static char * wpa_config_write_key_mgmt(const struct parse_data *data,
 {
 	char *buf, *pos, *end;
 	int ret;
+
+	LOGV("");
 
 	pos = buf = os_zalloc(100);
 	if (buf == NULL)
@@ -2677,6 +2697,8 @@ int wpa_config_add_prio_network(struct wpa_config *config,
 	size_t prio;
 	struct wpa_ssid *prev, **nlist;
 
+	LOGV("");
+
 	/*
 	 * Add to an existing priority list if one is available for the
 	 * configured priority level for this network.
@@ -3092,6 +3114,8 @@ int wpa_config_remove_network(struct wpa_config *config, int id)
  */
 void wpa_config_set_network_defaults(struct wpa_ssid *ssid)
 {
+	LOGV("");
+
 	ssid->proto = DEFAULT_PROTO;
 	ssid->pairwise_cipher = DEFAULT_PAIRWISE;
 	ssid->group_cipher = DEFAULT_GROUP;
@@ -4352,6 +4376,8 @@ int wpa_config_remove_blob(struct wpa_config *config, const char *name)
 struct wpa_config * wpa_config_alloc_empty(const char *ctrl_interface,
 					   const char *driver_param)
 {
+	LOGV("");
+
 #define ecw2cw(ecw) ((1 << (ecw)) - 1)
 
 	struct wpa_config *config;
@@ -4534,6 +4560,8 @@ static int wpa_global_config_parse_str(const struct global_parse_data *data,
 {
 	size_t len, prev_len;
 	char **dst, *tmp;
+
+	LOGV("");
 
 	len = os_strlen(pos);
 	if (data->param2 && len < (size_t) data->param2) {
@@ -5024,6 +5052,8 @@ static int wpa_config_get_str(const char *name, struct wpa_config *config,
 	char **val = (char **) (((u8 *) config) + (long) offset);
 	int res;
 
+	LOGV("");
+
 	if (pretty_print)
 		res = os_snprintf(buf, buflen, "%s=%s\n", name,
 				  *val ? *val : "null");
@@ -5356,6 +5386,8 @@ int wpa_config_process_global(struct wpa_config *config, char *pos, int line)
 {
 	size_t i;
 	int ret = 0;
+
+	LOGV("");
 
 	for (i = 0; i < NUM_GLOBAL_FIELDS; i++) {
 		const struct global_parse_data *field = &global_fields[i];

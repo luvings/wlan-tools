@@ -93,6 +93,8 @@ void wpa_debug_print_timestamp(void)
 
 void wpa_debug_open_syslog(void)
 {
+	LOGV("");
+
 	openlog("wpa_supplicant", LOG_PID | LOG_NDELAY, LOG_HOSTAPD);
 	wpa_debug_syslog++;
 }
@@ -167,6 +169,8 @@ int wpa_debug_open_linux_tracing(void)
 	}
 
 	snprintf(buf, sizeof(buf) - 1, "%s/tracing/trace_marker", path);
+
+	LOGV("tracing_path: %s", buf);
 
 	trace_fd = open(buf, O_WRONLY);
 	if (trace_fd < 0) {
@@ -556,6 +560,8 @@ int wpa_debug_open_file(const char *path)
 	if (!path)
 		return 0;
 
+	LOGV("dbg_file_path: %s", path);
+
 	if (last_path == NULL || os_strcmp(last_path, path) != 0) {
 		/* Save our path to enable re-open */
 		os_free(last_path);
@@ -612,6 +618,7 @@ void wpa_debug_close_file(void)
 void wpa_debug_setup_stdout(void)
 {
 #ifndef _WIN32
+	LOGV("");
 	setvbuf(stdout, NULL, _IOLBF, 0);
 #endif /* _WIN32 */
 }
@@ -633,6 +640,7 @@ static wpa_msg_get_ifname_func wpa_msg_ifname_cb = NULL;
 void wpa_msg_register_ifname_cb(wpa_msg_get_ifname_func func)
 {
 	wpa_msg_ifname_cb = func;
+	LOGV("%s", F2S(wpa_supplicant_msg_ifname_cb));
 }
 
 

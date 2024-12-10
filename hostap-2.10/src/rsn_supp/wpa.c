@@ -3174,6 +3174,8 @@ void wpa_sm_set_pmk_from_pmksa(struct wpa_sm *sm)
  */
 void wpa_sm_set_fast_reauth(struct wpa_sm *sm, int fast_reauth)
 {
+	LOGV("");
+
 	if (sm)
 		sm->fast_reauth = fast_reauth;
 }
@@ -3272,6 +3274,8 @@ void wpa_sm_set_own_addr(struct wpa_sm *sm, const u8 *addr)
 void wpa_sm_set_ifname(struct wpa_sm *sm, const char *ifname,
 		       const char *bridge_ifname)
 {
+	LOGV("");
+
 	if (sm) {
 		sm->ifname = ifname;
 		sm->bridge_ifname = bridge_ifname;
@@ -3286,6 +3290,8 @@ void wpa_sm_set_ifname(struct wpa_sm *sm, const char *ifname,
  */
 void wpa_sm_set_eapol(struct wpa_sm *sm, struct eapol_sm *eapol)
 {
+	LOGV("");
+
 	if (sm)
 		sm->eapol = eapol;
 }
@@ -3302,6 +3308,8 @@ int wpa_sm_set_param(struct wpa_sm *sm, enum wpa_sm_conf_params param,
 		     unsigned int value)
 {
 	int ret = 0;
+
+	LOGV("");
 
 	if (sm == NULL)
 		return -1;

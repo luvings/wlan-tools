@@ -93,6 +93,15 @@ static struct nl_sock * nl_create_handle(struct nl_cb *cb, const char *dbg)
 		return NULL;
 	}
 
+	struct sockaddr_in sin;
+	socklen_t sin_len = sizeof(sin);
+
+	if (getsockname(*(int *)((u8 *) handle + sizeof(struct sockaddr_nl) * 2),
+				(struct sockaddr *) &sin, &sin_len) == 0) {
+		LOGV("getsockname: ip='%s', port=%d, for generic netlink (%s)",
+			inet_ntoa(sin.sin_addr), ntohs(sin.sin_port), dbg);
+	}
+
 	return handle;
 }
 
@@ -124,6 +133,8 @@ static void nl80211_register_eloop_read(struct nl_sock **handle,
 	 * this less likely to occur.
 	 */
 	int err;
+
+	LOGV("");
 
 	err = nl_socket_set_buffer_size(*handle, 262144, 0);
 	if (err < 0) {
@@ -396,8 +407,6 @@ static int send_and_recv(struct nl80211_global *global,
 {
 	struct nl_cb *cb;
 	int err = -ENOMEM, opt;
-
-	LOGV("");
 
 	if (!msg)
 		return -ENOMEM;
@@ -1191,6 +1200,8 @@ static void wpa_driver_nl80211_event_rtm_newlink(void *ctx,
 	char extra[100], *pos, *end;
 	int init_failed;
 
+	LOGV("");
+
 	extra[0] = '\0';
 	pos = extra;
 	end = pos + sizeof(extra);
@@ -1365,6 +1376,8 @@ static void wpa_driver_nl80211_event_rtm_dellink(void *ctx,
 	u32 brid = 0;
 	char ifname[IFNAMSIZ + 1];
 	char extra[100], *pos, *end;
+
+	LOGV("");
 
 	extra[0] = '\0';
 	pos = extra;
@@ -1869,6 +1882,8 @@ static int wpa_driver_nl80211_init_nl_global(struct nl80211_global *global)
 {
 	int ret;
 
+	LOGV("");
+
 	global->nl_cb = nl_cb_alloc(NL_CB_DEFAULT);
 	if (global->nl_cb == NULL) {
 		wpa_printf(MSG_ERROR, "nl80211: Failed to allocate netlink "
@@ -1894,13 +1909,17 @@ static int wpa_driver_nl80211_init_nl_global(struct nl80211_global *global)
 		goto err;
 	}
 
+	LOGV("nl80211_global: nl80211_id=%d, nlctrl_id=%d", global->nl80211_id, global->nlctrl_id);
+
 	global->nl_event = nl_create_handle(global->nl_cb, "event");
 	if (global->nl_event == NULL)
 		goto err;
 
 	ret = nl_get_multicast_id(global, "nl80211", "scan");
-	if (ret >= 0)
+	if (ret >= 0) {
+		LOGV("get 'nl80211, scan' multicast group id=%d", ret);
 		ret = nl_socket_add_membership(global->nl_event, ret);
+	}
 	if (ret < 0) {
 		wpa_printf(MSG_ERROR, "nl80211: Could not add multicast "
 			   "membership for scan events: %d (%s)",
@@ -1909,8 +1928,10 @@ static int wpa_driver_nl80211_init_nl_global(struct nl80211_global *global)
 	}
 
 	ret = nl_get_multicast_id(global, "nl80211", "mlme");
-	if (ret >= 0)
+	if (ret >= 0) {
+		LOGV("get 'nl80211, mlme' multicast group id=%d", ret);
 		ret = nl_socket_add_membership(global->nl_event, ret);
+	}
 	if (ret < 0) {
 		wpa_printf(MSG_ERROR, "nl80211: Could not add multicast "
 			   "membership for mlme events: %d (%s)",
@@ -1919,8 +1940,10 @@ static int wpa_driver_nl80211_init_nl_global(struct nl80211_global *global)
 	}
 
 	ret = nl_get_multicast_id(global, "nl80211", "regulatory");
-	if (ret >= 0)
+	if (ret >= 0) {
+		LOGV("get 'nl80211, regulatory' multicast group id=%d", ret);
 		ret = nl_socket_add_membership(global->nl_event, ret);
+	}
 	if (ret < 0) {
 		wpa_printf(MSG_DEBUG, "nl80211: Could not add multicast "
 			   "membership for regulatory events: %d (%s)",
@@ -1929,8 +1952,10 @@ static int wpa_driver_nl80211_init_nl_global(struct nl80211_global *global)
 	}
 
 	ret = nl_get_multicast_id(global, "nl80211", "vendor");
-	if (ret >= 0)
+	if (ret >= 0) {
+		LOGV("get 'nl80211, vendor' multicast group id=%d", ret);
 		ret = nl_socket_add_membership(global->nl_event, ret);
+	}
 	if (ret < 0) {
 		wpa_printf(MSG_DEBUG, "nl80211: Could not add multicast "
 			   "membership for vendor events: %d (%s)",
@@ -2188,13 +2213,15 @@ static void * wpa_driver_nl80211_drv_init(void *ctx, const char *ifname,
 	struct wpa_driver_nl80211_data *drv;
 	struct i802_bss *bss;
 
+	LOGV("");
+
 	if (global_priv == NULL)
 		return NULL;
 	drv = os_zalloc(sizeof(*drv));
 	if (drv == NULL)
 		return NULL;
-	drv->global = global_priv;
-	drv->ctx = ctx;
+	drv->global = global_priv;		// wpa_s->global_drv_priv, struct nl80211_global *
+	drv->ctx = ctx;				// wpa_s, struct wpa_supplicant *
 	drv->hostapd = !!hostapd;
 	drv->eapol_sock = -1;
 
@@ -2284,6 +2311,8 @@ failed:
 static void * wpa_driver_nl80211_init(void *ctx, const char *ifname,
 				      void *global_priv)
 {
+	LOGV("");
+
 	return wpa_driver_nl80211_drv_init(ctx, ifname, global_priv, 0, NULL,
 					   NULL);
 }
@@ -8689,10 +8718,12 @@ static void * nl80211_global_init(void *ctx)
 	struct nl80211_global *global;
 	struct netlink_config *cfg;
 
+	LOGV("");
+
 	global = os_zalloc(sizeof(*global));
 	if (global == NULL)
 		return NULL;
-	global->ctx = ctx;
+	global->ctx = ctx;				// wpa_s->global, struct wpa_global *
 	global->ioctl_sock = -1;
 	dl_list_init(&global->interfaces);
 	global->if_add_ifindex = -1;
@@ -8704,6 +8735,7 @@ static void * nl80211_global_init(void *ctx)
 	cfg->ctx = global;
 	cfg->newlink_cb = wpa_driver_nl80211_event_rtm_newlink;
 	cfg->dellink_cb = wpa_driver_nl80211_event_rtm_dellink;
+
 	global->netlink = netlink_init(cfg);
 	if (global->netlink == NULL) {
 		os_free(cfg);

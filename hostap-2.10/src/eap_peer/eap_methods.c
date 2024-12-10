@@ -319,6 +319,8 @@ int eap_peer_method_register(struct eap_method *method)
 {
 	struct eap_method *m, *last = NULL;
 
+	LOGV("");
+
 	if (method == NULL || method->name == NULL ||
 	    method->version != EAP_PEER_METHOD_INTERFACE_VERSION) {
 		eap_peer_method_free(method);

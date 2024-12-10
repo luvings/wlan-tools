@@ -22,6 +22,7 @@
 int wifi_display_init(struct wpa_global *global)
 {
 	global->wifi_display = 1;
+	LOGV("global->wifi_display=%d", global->wifi_display);
 	return 0;
 }
 

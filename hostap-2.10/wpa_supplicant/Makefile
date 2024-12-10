@@ -30,9 +30,9 @@ LIBS_p := $(LIBS)
 endif
 endif
 
-export LIBDIR ?= /usr/local/lib
-export INCDIR ?= /usr/local/include
-export BINDIR ?= /usr/local/sbin
+export LIBDIR ?= /usr/lib
+export INCDIR ?= /usr/include
+export BINDIR ?= /usr/sbin
 PKG_CONFIG ?= pkg-config
 
 CFLAGS += $(EXTRA_CFLAGS)
@@ -1891,6 +1891,7 @@ wpa_priv: $(BCHECK) $(OBJS_priv)
 _OBJS_VAR := OBJS
 include ../src/objs.mk
 wpa_supplicant: $(BCHECK) $(OBJS) $(EXTRA_progs)
+	$(warning ..start..)
 	$(Q)$(LDO) $(LDFLAGS) -o wpa_supplicant $(OBJS) $(LIBS) $(EXTRALIBS)
 	@$(E) "  LD " $@
 

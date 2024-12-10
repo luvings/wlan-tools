@@ -202,8 +202,7 @@ int main(int argc, char *argv[])
 	wpa_supplicant_fd_workaround(1);
 
 	for (;;) {
-		c = getopt(argc, argv,
-			   "b:Bc:C:D:de:f:g:G:hi:I:KLMm:No:O:p:P:qsTtuvW");
+		c = getopt(argc, argv, "b:Bc:C:D:de:f:g:G:hi:I:KLMm:No:O:p:P:qsTtuvW");
 		if (c < 0)
 			break;
 		switch (c) {
@@ -212,15 +211,18 @@ int main(int argc, char *argv[])
 			break;
 		case 'B':
 			params.daemonize++;
+			LOGV("params.daemonize=%d", params.daemonize);
 			break;
 		case 'c':
 			iface->confname = optarg;
+			LOGV("iface->confname=%s", iface->confname);
 			break;
 		case 'C':
 			iface->ctrl_interface = optarg;
 			break;
 		case 'D':
 			iface->driver = optarg;
+			LOGV("iface->driver=%s", iface->driver);
 			break;
 		case 'd':
 #ifdef CONFIG_NO_STDOUT_DEBUG
@@ -234,6 +236,7 @@ int main(int argc, char *argv[])
 #endif /* CONFIG_NO_STDOUT_DEBUG */
 		case 'e':
 			params.entropy_file = optarg;
+			LOGV("params.entropy_file=%s", params.entropy_file);
 			break;
 #ifdef CONFIG_DEBUG_FILE
 		case 'f':
@@ -252,12 +255,15 @@ int main(int argc, char *argv[])
 			goto out;
 		case 'i':
 			iface->ifname = optarg;
+			LOGV("iface->ifname=%s", iface->ifname);
 			break;
 		case 'I':
 			iface->confanother = optarg;
+			LOGV("iface->confanother=%s", iface->confanother);
 			break;
 		case 'K':
 			params.wpa_debug_show_keys++;
+			LOGV("params.wpa_debug_show_keys=%d", params.wpa_debug_show_keys);
 			break;
 		case 'L':
 			license();
@@ -266,6 +272,7 @@ int main(int argc, char *argv[])
 #ifdef CONFIG_P2P
 		case 'm':
 			params.conf_p2p_dev = optarg;
+			LOGV("params.conf_p2p_dev=%s", params.conf_p2p_dev);
 			break;
 #endif /* CONFIG_P2P */
 		case 'o':
@@ -280,6 +287,7 @@ int main(int argc, char *argv[])
 		case 'P':
 			os_free(params.pid_file);
 			params.pid_file = os_rel2abs_path(optarg);
+			LOGV("params.pid_file=%s", params.pid_file);
 			break;
 		case 'q':
 			params.wpa_debug_level++;
@@ -296,10 +304,12 @@ int main(int argc, char *argv[])
 #endif /* CONFIG_DEBUG_LINUX_TRACING */
 		case 't':
 			params.wpa_debug_timestamp++;
+			LOGV("params.wpa_debug_timestamp=%d", params.wpa_debug_timestamp);
 			break;
 #ifdef CONFIG_CTRL_IFACE_DBUS_NEW
 		case 'u':
 			params.dbus_ctrl_interface = 1;
+			LOGV("params.dbus_ctrl_interface=%d", params.dbus_ctrl_interface);
 			break;
 #endif /* CONFIG_CTRL_IFACE_DBUS_NEW */
 		case 'v':
@@ -308,6 +318,7 @@ int main(int argc, char *argv[])
 			goto out;
 		case 'W':
 			params.wait_for_monitor++;
+			LOGV("params.wait_for_monitor=%d", params.wait_for_monitor);
 			break;
 #ifdef CONFIG_MATCH_IFACE
 		case 'M':
@@ -365,8 +376,7 @@ int main(int argc, char *argv[])
 	for (i = 0; exitcode == 0 && i < iface_count; i++) {
 		struct wpa_supplicant *wpa_s;
 
-		if ((ifaces[i].confname == NULL &&
-		     ifaces[i].ctrl_interface == NULL) ||
+		if ((ifaces[i].confname == NULL && ifaces[i].ctrl_interface == NULL) ||
 		    ifaces[i].ifname == NULL) {
 			if (iface_count == 1 && (params.ctrl_interface ||
 #ifdef CONFIG_MATCH_IFACE
@@ -378,6 +388,7 @@ int main(int argc, char *argv[])
 			exitcode = -1;
 			break;
 		}
+
 		wpa_s = wpa_supplicant_add_iface(global, &ifaces[i], NULL);
 		if (wpa_s == NULL) {
 			exitcode = -1;
