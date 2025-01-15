@@ -493,8 +493,6 @@ int send_and_recv_msgs(struct wpa_driver_nl80211_data *drv,
 		       int (*ack_handler_custom)(struct nl_msg *, void *),
 		       void *ack_data)
 {
-	LOGV("");
-
 	return send_and_recv(drv->global, drv->global->nl, msg,
 			     valid_handler, valid_data,
 			     ack_handler_custom, ack_data);
@@ -722,21 +720,31 @@ static int netdev_info_handler(struct nl_msg *msg, void *arg)
 	struct genlmsghdr *gnlh = nlmsg_data(nlmsg_hdr(msg));
 	struct wiphy_idx_data *info = arg;
 
+	LOGV("");
+
 	nla_parse(tb, NL80211_ATTR_MAX, genlmsg_attrdata(gnlh, 0),
 		  genlmsg_attrlen(gnlh, 0), NULL);
 
-	if (tb[NL80211_ATTR_WIPHY])
+	if (tb[NL80211_ATTR_WIPHY]) {
 		info->wiphy_idx = nla_get_u32(tb[NL80211_ATTR_WIPHY]);
+		LOGV("info->wiphy_idx=%d", info->wiphy_idx);
+	}
 
-	if (tb[NL80211_ATTR_IFTYPE])
+	if (tb[NL80211_ATTR_IFTYPE]) {
 		info->nlmode = nla_get_u32(tb[NL80211_ATTR_IFTYPE]);
+		LOGV("info->nlmode=%d", info->nlmode);
+	}
 
-	if (tb[NL80211_ATTR_MAC] && info->macaddr)
+	if (tb[NL80211_ATTR_MAC] && info->macaddr) {
 		os_memcpy(info->macaddr, nla_data(tb[NL80211_ATTR_MAC]),
 			  ETH_ALEN);
+		LOGV("info->macaddr=%pM", info->macaddr);
+	}
 
-	if (tb[NL80211_ATTR_4ADDR])
+	if (tb[NL80211_ATTR_4ADDR]) {
 		info->use_4addr = nla_get_u8(tb[NL80211_ATTR_4ADDR]);
+		LOGV("info->use_4addr=%d", info->use_4addr);
+	}
 
 	return NL_SKIP;
 }
@@ -768,6 +776,8 @@ static enum nl80211_iftype nl80211_get_ifmode(struct i802_bss *bss)
 		.macaddr = NULL,
 	};
 
+	LOGV("");
+
 	if (!(msg = nl80211_cmd_msg(bss, 0, NL80211_CMD_GET_INTERFACE)))
 		return NL80211_IFTYPE_UNSPECIFIED;
 
@@ -784,6 +794,8 @@ static int nl80211_get_macaddr(struct i802_bss *bss)
 	struct wiphy_idx_data data = {
 		.macaddr = bss->addr,
 	};
+
+	LOGV("");
 
 	if (!(msg = nl80211_cmd_msg(bss, 0, NL80211_CMD_GET_INTERFACE)))
 		return -1;
@@ -922,8 +934,7 @@ nl80211_get_wiphy_data_ap(struct i802_bss *bss)
 		nl_cb_set(w->nl_cb, NL_CB_VALID, NL_CB_CUSTOM,
 			  process_beacon_event, w);
 
-		w->nl_beacons = nl_create_handle(bss->drv->global->nl_cb,
-						 "wiphy beacons");
+		w->nl_beacons = nl_create_handle(bss->drv->global->nl_cb, "wiphy beacons");
 		if (w->nl_beacons == NULL) {
 			os_free(w);
 			return NULL;
@@ -2108,6 +2119,8 @@ static void wpa_driver_nl80211_handle_eapol_tx_status(int sock,
 
 static int nl80211_init_connect_handle(struct i802_bss *bss)
 {
+	LOGV("");
+
 	if (bss->nl_connect) {
 		wpa_printf(MSG_DEBUG,
 			   "nl80211: Connect handle already created (nl_connect=%p)",
@@ -2127,6 +2140,8 @@ static int nl80211_init_connect_handle(struct i802_bss *bss)
 
 static int nl80211_init_bss(struct i802_bss *bss)
 {
+	LOGV("");
+
 	bss->nl_cb = nl_cb_alloc(NL_CB_DEFAULT);
 	if (!bss->nl_cb)
 		return -1;
@@ -2240,9 +2255,10 @@ static void * wpa_driver_nl80211_drv_init(void *ctx, const char *ifname,
 		os_free(drv);
 		return NULL;
 	}
+
 	bss = drv->first_bss;
-	bss->drv = drv;
-	bss->ctx = ctx;
+	bss->drv = drv;				// struct wpa_driver_nl80211_data *
+	bss->ctx = ctx;				// wpa_s, struct wpa_supplicant *
 
 	os_strlcpy(bss->ifname, ifname, sizeof(bss->ifname));
 	drv->monitor_ifidx = -1;
@@ -2284,8 +2300,8 @@ static void * wpa_driver_nl80211_drv_init(void *ctx, const char *ifname,
 				drv, NULL);
 		}
 	}
-skip_wifi_status:
 
+skip_wifi_status:
 	if (drv->global) {
 		nl80211_check_global(drv->global);
 		dl_list_add(&drv->global->interfaces, &drv->list);
@@ -2788,6 +2804,8 @@ static int i802_set_iface_flags(struct i802_bss *bss, int up)
 {
 	enum nl80211_iftype nlmode;
 
+	LOGV("");
+
 	nlmode = nl80211_get_ifmode(bss);
 	if (nlmode != NL80211_IFTYPE_P2P_DEVICE) {
 		return linux_set_iface_flags(bss->drv->global->ioctl_sock,
@@ -2863,10 +2881,14 @@ wpa_driver_nl80211_finish_drv_init(struct wpa_driver_nl80211_data *drv,
 	int send_rfkill_event = 0;
 	enum nl80211_iftype nlmode;
 
+	LOGV("");
+
 	drv->ifindex = if_nametoindex(bss->ifname);
 	bss->ifindex = drv->ifindex;
 	bss->wdev_id = drv->global->if_add_wdevid;
 	bss->wdev_id_set = drv->global->if_add_wdevid_set;
+
+	LOGV("first_bss: ifindex=%d, wdev_id=%ld, wdev_id_set=%d", drv->ifindex, bss->wdev_id, bss->wdev_id_set);
 
 	bss->if_dynamic = drv->ifindex == drv->global->if_add_ifindex;
 	bss->if_dynamic = bss->if_dynamic || drv->global->if_add_wdevid_set;
@@ -5554,6 +5576,8 @@ int nl80211_create_iface(struct wpa_driver_nl80211_data *drv,
 {
 	int ret;
 
+	LOGV("");
+
 	ret = nl80211_create_iface_once(drv, ifname, iftype, addr, wds, handler,
 					arg);
 
@@ -6804,6 +6828,8 @@ void nl80211_restore_ap_mode(struct i802_bss *bss)
 int wpa_driver_nl80211_set_mode(struct i802_bss *bss,
 				enum nl80211_iftype nlmode)
 {
+	LOGV("");
+
 	return wpa_driver_nl80211_set_mode_impl(bss, nlmode, NULL);
 }
 
@@ -7908,6 +7934,8 @@ static int wpa_driver_nl80211_if_add(void *priv, enum wpa_driver_if_type type,
 	struct wpa_driver_nl80211_data *drv = bss->drv;
 	int ifidx;
 	int added = 1;
+
+	LOGV("");
 
 	if (addr)
 		os_memcpy(if_addr, addr, ETH_ALEN);

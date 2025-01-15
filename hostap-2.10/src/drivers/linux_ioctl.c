@@ -21,6 +21,8 @@ int linux_set_iface_flags(int sock, const char *ifname, int dev_up)
 	struct ifreq ifr;
 	int ret;
 
+	LOGV("");
+
 	if (sock < 0)
 		return -1;
 
@@ -74,6 +76,8 @@ int linux_iface_up(int sock, const char *ifname)
 		return ret;
 	}
 
+	LOGV("%s iface is '%s'", ifname, !!(ifr.ifr_flags & IFF_UP) ? "up" : "down");
+
 	return !!(ifr.ifr_flags & IFF_UP);
 }
 
@@ -104,6 +108,8 @@ int linux_get_ifhwaddr(int sock, const char *ifname, u8 *addr)
 int linux_set_ifhwaddr(int sock, const char *ifname, const u8 *addr)
 {
 	struct ifreq ifr;
+
+	LOGV("");
 
 	os_memset(&ifr, 0, sizeof(ifr));
 	os_strlcpy(ifr.ifr_name, ifname, IFNAMSIZ);

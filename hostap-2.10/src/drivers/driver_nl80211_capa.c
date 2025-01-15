@@ -32,6 +32,8 @@ static int protocol_feature_handler(struct nl_msg *msg, void *arg)
 	if (tb_msg[NL80211_ATTR_PROTOCOL_FEATURES])
 		*feat = nla_get_u32(tb_msg[NL80211_ATTR_PROTOCOL_FEATURES]);
 
+	LOGV("feat=0x%x", *feat);
+
 	return NL_SKIP;
 }
 
@@ -40,6 +42,8 @@ static u32 get_nl80211_protocol_features(struct wpa_driver_nl80211_data *drv)
 {
 	u32 feat = 0;
 	struct nl_msg *msg;
+
+	LOGV("");
 
 	msg = nlmsg_alloc();
 	if (!msg)
@@ -124,8 +128,7 @@ static void wiphy_info_supported_iftypes(struct wiphy_info_data *info,
 			info->capa->flags |= WPA_DRIVER_FLAGS_IBSS;
 			break;
 		case NL80211_IFTYPE_P2P_DEVICE:
-			info->capa->flags |=
-				WPA_DRIVER_FLAGS_DEDICATED_P2P_DEVICE;
+			info->capa->flags |= WPA_DRIVER_FLAGS_DEDICATED_P2P_DEVICE;
 			break;
 		case NL80211_IFTYPE_P2P_GO:
 			info->p2p_go_supported = 1;
@@ -135,6 +138,9 @@ static void wiphy_info_supported_iftypes(struct wiphy_info_data *info,
 			break;
 		}
 	}
+
+	LOGV("capa->flags=0x%lx", info->capa->flags);
+	LOGV("info: p2p_go_supported=%d, p2p_client_supported=%d", info->p2p_go_supported, info->p2p_client_supported);
 }
 
 
@@ -499,6 +505,8 @@ static void wiphy_info_max_roc(struct wpa_driver_capa *capa,
 static void wiphy_info_tdls(struct wpa_driver_capa *capa, struct nlattr *tdls,
 			    struct nlattr *ext_setup)
 {
+	LOGV("");
+
 	if (tdls == NULL)
 		return;
 
@@ -854,23 +862,34 @@ static int wiphy_info_handler(struct nl_msg *msg, void *arg)
 	struct wpa_driver_capa *capa = info->capa;
 	struct wpa_driver_nl80211_data *drv = info->drv;
 
+	LOGV("");
+
 	nla_parse(tb, NL80211_ATTR_MAX, genlmsg_attrdata(gnlh, 0),
 		  genlmsg_attrlen(gnlh, 0), NULL);
 
-	if (tb[NL80211_ATTR_WIPHY])
+	if (tb[NL80211_ATTR_WIPHY]) {
 		drv->wiphy_idx = nla_get_u32(tb[NL80211_ATTR_WIPHY]);
+		LOGV("drv->wiphy_idx=%d", drv->wiphy_idx);
+	}
 
-	if (tb[NL80211_ATTR_WIPHY_NAME])
+	if (tb[NL80211_ATTR_WIPHY_NAME]) {
 		os_strlcpy(drv->phyname,
 			   nla_get_string(tb[NL80211_ATTR_WIPHY_NAME]),
 			   sizeof(drv->phyname));
-	if (tb[NL80211_ATTR_MAX_NUM_SCAN_SSIDS])
+		LOGV("drv->phyname='%s'", drv->phyname);
+	}
+
+	if (tb[NL80211_ATTR_MAX_NUM_SCAN_SSIDS]) {
 		capa->max_scan_ssids =
 			nla_get_u8(tb[NL80211_ATTR_MAX_NUM_SCAN_SSIDS]);
+		LOGV("capa->max_scan_ssids=%d", capa->max_scan_ssids);
+	}
 
-	if (tb[NL80211_ATTR_MAX_NUM_SCHED_SCAN_SSIDS])
+	if (tb[NL80211_ATTR_MAX_NUM_SCHED_SCAN_SSIDS]) {
 		capa->max_sched_scan_ssids =
 			nla_get_u8(tb[NL80211_ATTR_MAX_NUM_SCHED_SCAN_SSIDS]);
+		LOGV("capa->max_sched_scan_ssids=%d", capa->max_sched_scan_ssids);
+	}
 
 	if (tb[NL80211_ATTR_MAX_NUM_SCHED_SCAN_PLANS] &&
 	    tb[NL80211_ATTR_MAX_SCAN_PLAN_INTERVAL] &&
@@ -883,15 +902,23 @@ static int wiphy_info_handler(struct nl_msg *msg, void *arg)
 
 		capa->max_sched_scan_plan_iterations =
 			nla_get_u32(tb[NL80211_ATTR_MAX_SCAN_PLAN_ITERATIONS]);
+
+		LOGV("capa: max_sched_scan_plans=%d, max_sched_scan_plan_interval=%d, "
+			"max_sched_scan_plan_iterations=%d", capa->max_sched_scan_plans,
+			capa->max_sched_scan_plan_interval, capa->max_sched_scan_plan_iterations);
 	}
 
-	if (tb[NL80211_ATTR_MAX_MATCH_SETS])
+	if (tb[NL80211_ATTR_MAX_MATCH_SETS]) {
 		capa->max_match_sets =
 			nla_get_u8(tb[NL80211_ATTR_MAX_MATCH_SETS]);
+		LOGV("capa->max_match_sets=%d", capa->max_match_sets);
+	}
 
-	if (tb[NL80211_ATTR_MAC_ACL_MAX])
+	if (tb[NL80211_ATTR_MAC_ACL_MAX]) {
 		capa->max_acl_mac_addrs =
 			nla_get_u32(tb[NL80211_ATTR_MAC_ACL_MAX]);
+		LOGV("capa->max_acl_mac_addrs=%d", capa->max_acl_mac_addrs);
+	}
 
 	wiphy_info_supported_iftypes(info, tb[NL80211_ATTR_SUPPORTED_IFTYPES]);
 	wiphy_info_iface_comb(info, tb[NL80211_ATTR_INTERFACE_COMBINATIONS]);
@@ -1081,9 +1108,11 @@ static int wpa_driver_nl80211_get_info(struct wpa_driver_nl80211_data *drv,
 	struct nl_msg *msg;
 	int flags = 0;
 
+	LOGV("");
+
 	os_memset(info, 0, sizeof(*info));
 	info->capa = &drv->capa;
-	info->drv = drv;
+	info->drv = drv;				// struct wpa_driver_nl80211_data *
 
 	feat = get_nl80211_protocol_features(drv);
 	if (feat & NL80211_PROTOCOL_FEATURE_SPLIT_WIPHY_DUMP)
@@ -1321,6 +1350,8 @@ int wpa_driver_nl80211_capa(struct wpa_driver_nl80211_data *drv)
 	struct wiphy_info_data info;
 	int i;
 
+	LOGV("");
+
 	if (wpa_driver_nl80211_get_info(drv, &info))
 		return -1;
 
@@ -1329,6 +1360,8 @@ int wpa_driver_nl80211_capa(struct wpa_driver_nl80211_data *drv)
 
 	drv->has_capability = 1;
 	drv->has_driver_key_mgmt = info.has_key_mgmt | info.has_key_mgmt_iftype;
+
+	LOGV("drv->has_driver_key_mgmt=%d", drv->has_driver_key_mgmt);
 
 	/* Fallback to hardcoded defaults if the driver does nott advertize any
 	 * AKM capabilities. */
